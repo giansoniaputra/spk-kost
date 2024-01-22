@@ -50,6 +50,7 @@ $(document).ready(function () {
         $("#kriteria").val("")
         $("#atribut").val("")
         $("#uuid").val("")
+        $("#bobot").val("")
         $("#btn-action").html("")
     })
     // PROSES SIMPAN KRITERIA
@@ -72,6 +73,7 @@ $(document).ready(function () {
                     $("#kriteria").val("")
                     $("#atribut").val("")
                     $("#uuid").val("")
+                    $("#bobot").val("")
                     $("#modal-kriteria").modal("hide");
                     $("#btn-action").html("")
                     Swal.fire("Success!", response.success, "success");
@@ -93,6 +95,7 @@ $(document).ready(function () {
                 $("#kode").val(response.data.kode)
                 $("#kriteria").val(response.data.kriteria)
                 $("#atribut").val(response.data.atribut)
+                $("#bobot").val(response.data.bobot)
                 $("#btn-action").html(`<button type="button" class="btn btn-primary" id="btn-update">Ubah</button>`)
             }
         });
@@ -119,6 +122,7 @@ $(document).ready(function () {
                     $("#kriteria").val("")
                     $("#atribut").val("")
                     $("#uuid").val("")
+                    $("#bobot").val("")
                     $("#modal-kriteria").modal("hide");
                     $("#btn-action").html("")
                     Swal.fire("Success!", response.success, "success");

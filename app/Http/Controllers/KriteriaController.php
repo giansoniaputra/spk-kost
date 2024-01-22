@@ -50,33 +50,14 @@ class KriteriaController extends Controller
         if ($validator->fails()) {
             return response()->json(['errors' => $validator->errors()]);
         } else {
-            $cek = Kriteria::first();
-            if ($cek) {
-                //SIMPAN DATA
-                $data = [
-                    'uuid' => Str::orderedUuid(),
-                    'kode' => $request->kode,
-                    'kriteria' => $request->kriteria,
-                    'atribut' => $request->atribut,
-                    'bobot' => $request->bobot,
-                ];
-                Kriteria::create($data);
-
-                $sum_bobot = Kriteria::sum('bobot');
-                $query = Kriteria::all();
-                foreach ($query as $row) {
-                    Kriteria::where('uuid', $row->uuid)->update(['bobot' => $row->bobot / $sum_bobot]);
-                }
-            } else {
-                $data = [
-                    'uuid' => Str::orderedUuid(),
-                    'kode' => $request->kode,
-                    'kriteria' => $request->kriteria,
-                    'atribut' => $request->atribut,
-                    'bobot' => 1,
-                ];
-                Kriteria::create($data);
-            }
+            $data = [
+                'uuid' => Str::orderedUuid(),
+                'kode' => strtoupper($request->kode),
+                'kriteria' => $request->kriteria,
+                'atribut' => $request->atribut,
+                'bobot' => $request->bobot,
+            ];
+            Kriteria::create($data);
             return response()->json(['success' => 'Kriteria Berhasil Disimpan']);
         }
     }
@@ -120,9 +101,10 @@ class KriteriaController extends Controller
             return response()->json(['errors' => $validator->errors()]);
         } else {
             $data = [
-                'kode' => $request->kode,
+                'kode' => strtoupper($request->kode),
                 'kriteria' => $request->kriteria,
                 'atribut' => $request->atribut,
+                'bobot' => $request->bobot,
             ];
             Kriteria::where('uuid', $request->uuid)->update($data);
             return response()->json(['success' => 'Kriteria Berhasil Disimpan']);
@@ -141,6 +123,10 @@ class KriteriaController extends Controller
     public function dataTablesKriteria(Request $request)
     {
         $query = Kriteria::all();
+        $sum_bobot = Kriteria::sum('bobot');
+        foreach ($query as $row) {
+            $row->bobot = floatval(number_format($row->bobot / $sum_bobot, 1));
+        }
         return DataTables::of($query)->addColumn('action', function ($row) {
             $actionBtn =
                 '

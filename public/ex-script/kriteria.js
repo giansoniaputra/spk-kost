@@ -38,6 +38,49 @@ $(document).ready(function () {
             },
         ],
     });
+    let table2 = $("#table-sub-kriteria").DataTable({
+        responsive: true,
+        // responsive: !0,
+        autoWidth: false,
+        serverSide: true,
+        ajax: {
+            url: "/dataTablesSubKriteria",
+            type: "GET",
+            dataType: "json",
+            data: function (d) {
+                d.uuid_kriteria = $("#uuid_kriteria").val()
+            }
+        },
+        columns: [
+            {
+                data: null,
+                orderable: false,
+                render: function (data, type, row, meta) {
+                    var pageInfo = $("#table-sub-kriteria").DataTable().page.info();
+                    var index = meta.row + pageInfo.start + 1;
+                    return index;
+                },
+            },
+            {
+                data: "sub_kriteria",
+            },
+            {
+                data: "bobot",
+            },
+            {
+                data: "action",
+                orderable: true,
+                searchable: true,
+            },
+        ],
+        columnDefs: [
+            {
+                targets: [3], // index kolom atau sel yang ingin diatur
+                className: "text-center", // kelas CSS untuk memposisikan isi ke tengah
+            },
+        ],
+    });
+
     // KETIKA BUTTON TAMBAH DATA DI KLIK
     $("#btn-add-data").on("click", function () {
         $("#modal-title").html('Tambah Kriteria')
@@ -51,6 +94,12 @@ $(document).ready(function () {
         $("#atribut").val("")
         $("#uuid").val("")
         $("#bobot").val("")
+        $("#btn-action").html("")
+    })
+    // KETIKA MODAL DITUTUP
+    $("#btn-close-sub").on("click", function () {
+        $("#sub_kriteria").val("")
+        $("#bobot-sub").val("")
         $("#btn-action").html("")
     })
     // PROSES SIMPAN KRITERIA
@@ -112,6 +161,7 @@ $(document).ready(function () {
             type: "POST",
             dataType: 'json',
             success: function (response) {
+                console.log(response);
                 if (response.errors) {
                     displayErrors(response.errors);
                     button.removeAttr('disabled');
@@ -163,6 +213,34 @@ $(document).ready(function () {
             }
         });
     });
+
+    // KETIKA TOMBOL SUBKRITERIA DI KLIK
+    $("#table-kriteria").on("click", ".sub-button", function () {
+        $("#judul-kriteria").html($(this).data('judul'))
+        $("#btn-action-add-sub").html(`<button class="btn btn-primary btn-md" id="btn-add-sub">Tambah Sub Kriteria</button>`)
+        $("#uuid_kriteria").val($(this).data('uuid'))
+        table2.ajax.reload()
+        $("#modal-sub-kriteria").modal("show")
+    })
+
+    // KETIKA TOMBOL TAMBAH SUB DI KLIK
+    $("#modal-sub-kriteria").on("click", "#btn-add-sub", function () {
+        $.ajax({
+            data: $('form[id="form-sub-kriteria"]').serialize() + '&uuid_kriteria=' + $("#uuid_kriteria").val(),
+            url: "/subKriteria",
+            type: "POST",
+            dataType: 'json',
+            success: function (response) {
+                if (response.errors) {
+                    displayErrors(response.errors)
+                } else {
+                    $("#sub_kriteria").val("")
+                    $("#bobot-sub").val("")
+                    table2.ajax.reload()
+                }
+            }
+        });
+    })
     //Hendler Error
     function displayErrors(errors) {
         // menghapus class 'is-invalid' dan pesan error sebelumnya

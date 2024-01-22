@@ -14,4 +14,11 @@ class Kriteria extends Model
     {
         return 'uuid';
     }
+
+    public static function bobot($bobot)
+    {
+        $sum_bobot = Kriteria::sum('bobot');
+        $data = floatval(number_format($bobot / $sum_bobot, 1));
+        return $data;
+    }
 }

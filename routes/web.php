@@ -1,7 +1,8 @@
 <?php
 
-use App\Http\Controllers\KriteriaController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\KriteriaController;
+use App\Http\Controllers\SubKriteriaController;
 
 /*
 |--------------------------------------------------------------------------
@@ -24,3 +25,6 @@ Route::get('/', function () {
 Route::resource('/kriteria', KriteriaController::class);
 Route::get('/dataTablesKriteria', [KriteriaController::class, 'dataTablesKriteria']);
 Route::get('/kriteriaEdit/{kreteria:uuid}', [KriteriaController::class, 'edit']);
+// SUB KRITERIA
+Route::resource('/subKriteria', SubKriteriaController::class);
+Route::get('/dataTablesSubKriteria', [SubKriteriaController::class, 'dataTablesSubKriteria']);

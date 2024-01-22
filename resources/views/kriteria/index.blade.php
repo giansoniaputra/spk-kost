@@ -27,5 +27,6 @@
     </div>
 </div>
 @include('kriteria.modal-kriteria')
+@include('kriteria.modal-sub-kriteria')
 <script src="/ex-script/kriteria.js"></script>
 @endsection

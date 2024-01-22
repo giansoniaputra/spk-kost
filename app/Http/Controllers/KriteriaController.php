@@ -35,13 +35,14 @@ class KriteriaController extends Controller
     public function store(Request $request)
     {
         $rules = [
-            'kode' => 'required',
+            'kode' => 'required|unique:kriterias',
             'kriteria' => 'required',
             'atribut' => 'required',
             'bobot' => 'required',
         ];
         $pesan = [
             'kode.required' => "Kode tidak boleh kosong",
+            'kode.unique' => "Kode sudah ada",
             'kriteria.required' => "Kriteria tidak boleh kosong",
             'atribut.required' => "Atribut tidak boleh kosong",
             'bobot.required' => "Atribut tidak boleh kosong",
@@ -85,17 +86,25 @@ class KriteriaController extends Controller
     public function update(Request $request, Kriteria $kriteria)
     {
         $rules = [
-            'kode' => 'required',
             'kriteria' => 'required',
             'atribut' => 'required',
             'bobot' => 'required',
         ];
         $pesan = [
-            'kode.required' => "Kode tidak boleh kosong",
             'kriteria.required' => "Kriteria tidak boleh kosong",
             'atribut.required' => "Atribut tidak boleh kosong",
             'bobot.required' => "Atribut tidak boleh kosong",
         ];
+        $cek = Kriteria::where('uuid', $request->uuid)->first();
+        if ($cek->kode == $request->kode) {
+            $rules['kode'] = 'required';
+            $pesan['kode.required'] = 'Kode tidak boleh kosong';
+        } else {
+            $rules['kode'] = 'required|unique:kriterias';
+            $pesan['kode.unique'] = 'Kode sudah ada';
+            $pesan['kode.required'] = 'Kode tidak boleh kosong';
+        }
+
         $validator = Validator::make($request->all(), $rules, $pesan);
         if ($validator->fails()) {
             return response()->json(['errors' => $validator->errors()]);
@@ -123,13 +132,13 @@ class KriteriaController extends Controller
     public function dataTablesKriteria(Request $request)
     {
         $query = Kriteria::all();
-        $sum_bobot = Kriteria::sum('bobot');
         foreach ($query as $row) {
-            $row->bobot = floatval(number_format($row->bobot / $sum_bobot, 1));
+            $row->bobot = Kriteria::bobot($row->bobot);
         }
         return DataTables::of($query)->addColumn('action', function ($row) {
             $actionBtn =
                 '
+                <button class="btn btn-rounded btn-sm btn-primary text-white sub-button" title="Sub Kriteria" data-uuid="' . $row->uuid . '" data-judul="' . $row->kriteria . '">Sub Kriteria</button>
                 <button class="btn btn-rounded btn-sm btn-warning text-dark edit-button" title="Edit Data" data-uuid="' . $row->uuid . '"><i class="fas fa-edit"></i></button>
                 <button class="btn btn-rounded btn-sm btn-danger text-white delete-button" title="Hapus Data" data-uuid="' . $row->uuid . '" data-token="' . csrf_token() . '"><i class="fas fa-trash-alt"></i></button>';
             return $actionBtn;

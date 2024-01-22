@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\KriteriaController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -14,5 +15,12 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', function () {
-    return view('welcome');
+    $data = [
+        'title' => 'Dashboard'
+    ];
+    return view('welcome', $data);
 });
+// KRITERIA
+Route::resource('/kriteria', KriteriaController::class);
+Route::get('/dataTablesKriteria', [KriteriaController::class, 'dataTablesKriteria']);
+Route::get('/kriteriaEdit/{kreteria:uuid}', [KriteriaController::class, 'edit']);

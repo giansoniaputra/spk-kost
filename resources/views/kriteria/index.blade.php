@@ -16,6 +16,7 @@
                         <th>Kode</th>
                         <th>Kriteria</th>
                         <th>Atribut</th>
+                        <th>Bobot</th>
                         <th>Action</th>
                     </thead>
                     <tbody>

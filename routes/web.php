@@ -16,9 +16,9 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
     $data = [
-        'title' => 'Dashboard'
+        'title' => 'Kriteria'
     ];
-    return view('welcome', $data);
+    return view('kriteria.index', $data);
 });
 // KRITERIA
 Route::resource('/kriteria', KriteriaController::class);

@@ -28,6 +28,10 @@
                             <option value="BENEFIT">BENEFIT</option>
                         </select>
                     </div>
+                    <div class="form-group mb-3">
+                        <label for="bobot">Bobot</label>
+                        <input type="text" id="bobot" name="bobot" class="form-control">
+                    </div>
                 </form>
             </div>
             <div class="modal-footer" id="btn-action">

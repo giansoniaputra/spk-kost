@@ -38,23 +38,45 @@ class KriteriaController extends Controller
             'kode' => 'required',
             'kriteria' => 'required',
             'atribut' => 'required',
+            'bobot' => 'required',
         ];
         $pesan = [
             'kode.required' => "Kode tidak boleh kosong",
             'kriteria.required' => "Kriteria tidak boleh kosong",
             'atribut.required' => "Atribut tidak boleh kosong",
+            'bobot.required' => "Atribut tidak boleh kosong",
         ];
         $validator = Validator::make($request->all(), $rules, $pesan);
         if ($validator->fails()) {
             return response()->json(['errors' => $validator->errors()]);
         } else {
-            $data = [
-                'uuid' => Str::orderedUuid(),
-                'kode' => $request->kode,
-                'kriteria' => $request->kriteria,
-                'atribut' => $request->atribut,
-            ];
-            Kriteria::create($data);
+            $cek = Kriteria::first();
+            if ($cek) {
+                //SIMPAN DATA
+                $data = [
+                    'uuid' => Str::orderedUuid(),
+                    'kode' => $request->kode,
+                    'kriteria' => $request->kriteria,
+                    'atribut' => $request->atribut,
+                    'bobot' => $request->bobot,
+                ];
+                Kriteria::create($data);
+
+                $sum_bobot = Kriteria::sum('bobot');
+                $query = Kriteria::all();
+                foreach ($query as $row) {
+                    Kriteria::where('uuid', $row->uuid)->update(['bobot' => $row->bobot / $sum_bobot]);
+                }
+            } else {
+                $data = [
+                    'uuid' => Str::orderedUuid(),
+                    'kode' => $request->kode,
+                    'kriteria' => $request->kriteria,
+                    'atribut' => $request->atribut,
+                    'bobot' => 1,
+                ];
+                Kriteria::create($data);
+            }
             return response()->json(['success' => 'Kriteria Berhasil Disimpan']);
         }
     }
@@ -85,11 +107,13 @@ class KriteriaController extends Controller
             'kode' => 'required',
             'kriteria' => 'required',
             'atribut' => 'required',
+            'bobot' => 'required',
         ];
         $pesan = [
             'kode.required' => "Kode tidak boleh kosong",
             'kriteria.required' => "Kriteria tidak boleh kosong",
             'atribut.required' => "Atribut tidak boleh kosong",
+            'bobot.required' => "Atribut tidak boleh kosong",
         ];
         $validator = Validator::make($request->all(), $rules, $pesan);
         if ($validator->fails()) {

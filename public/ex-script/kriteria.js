@@ -48,7 +48,7 @@ $(document).ready(function () {
             type: "GET",
             dataType: "json",
             data: function (d) {
-                d.uuid_kriteria = $("#uuid_kriteria").val()
+                d.kriteria_uuid = $("#kriteria_uuid").val()
             }
         },
         columns: [
@@ -218,7 +218,7 @@ $(document).ready(function () {
     $("#table-kriteria").on("click", ".sub-button", function () {
         $("#judul-kriteria").html($(this).data('judul'))
         $("#btn-action-add-sub").html(`<button class="btn btn-primary btn-md" id="btn-add-sub">Tambah Sub Kriteria</button>`)
-        $("#uuid_kriteria").val($(this).data('uuid'))
+        $("#kriteria_uuid").val($(this).data('uuid'))
         table2.ajax.reload()
         $("#modal-sub-kriteria").modal("show")
     })
@@ -226,7 +226,7 @@ $(document).ready(function () {
     // KETIKA TOMBOL TAMBAH SUB DI KLIK
     $("#modal-sub-kriteria").on("click", "#btn-add-sub", function () {
         $.ajax({
-            data: $('form[id="form-sub-kriteria"]').serialize() + '&uuid_kriteria=' + $("#uuid_kriteria").val(),
+            data: $('form[id="form-sub-kriteria"]').serialize() + '&kriteria_uuid=' + $("#kriteria_uuid").val(),
             url: "/subKriteria",
             type: "POST",
             dataType: 'json',
@@ -240,6 +240,76 @@ $(document).ready(function () {
                 }
             }
         });
+    })
+    // AMBIL DATA YANG AKAN DI EDIT
+    $("#table-sub-kriteria").on("click", ".edit-button", function () {
+        let uuid = $(this).data("uuid");
+        $("#current_uuid_sub").val(uuid)
+        $.ajax({
+            data: { uuid: uuid },
+            url: "/subKriteria/" + uuid + "/edit",
+            type: "GET",
+            dataType: 'json',
+            success: function (response) {
+                $("#sub_kriteria").val(response.data.sub_kriteria);
+                $("#bobot-sub").val(response.data.bobot);
+                $("#btn-action-add-sub").html(`<button class="btn btn-warning text-white btn-md mr-2" id="btn-update-sub">Update Sub Kriteria</button><button class="btn btn-danger btn-md" id="btn-batal-update"><i class="far fa-times-circle"></i></button>`)
+
+            }
+        });
+    })
+    // UPDATE SUB KRITERIA
+    $("#modal-sub-kriteria").on("click", "#btn-update-sub", function () {
+        let form = $("#form-sub-kriteria").serialize();
+        $.ajax({
+            data: form + '&_method=PUT',
+            url: "/subKriteria/" + $("#current_uuid_sub").val(),
+            type: "POST",
+            dataType: 'json',
+            success: function (response) {
+                $("#btn-action-add-sub").html(`<button class="btn btn-primary btn-md" id="btn-add-sub">Tambah Sub Kriteria</button>`)
+                $("#sub_kriteria").val("")
+                $("#current_uuid_sub").val("")
+                $("#bobot-sub").val("")
+                table2.ajax.reload()
+            }
+        });
+    })
+    //HAPUS DATA
+    $("#table-sub-kriteria").on("click", ".delete-button", function () {
+        let uuid = $(this).attr("data-uuid");
+        let token = $(this).attr("data-token");
+        Swal.fire({
+            title: "Apakah Kamu Yakin?",
+            text: "Kamu akan menghapus data guru!",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#3085d6",
+            cancelButtonColor: "#d33",
+            confirmButtonText: "Yes, Hapus!",
+        }).then((result) => {
+            if (result.isConfirmed) {
+                $.ajax({
+                    data: {
+                        _method: "DELETE",
+                        _token: token,
+                        uuid: uuid
+
+                    },
+                    url: "/subKriteria/" + uuid,
+                    type: "POST",
+                    dataType: "json",
+                    success: function (response) {
+                        table2.ajax.reload();
+                    },
+                });
+            }
+        });
+    });
+    $("#modal-sub-kriteria").on("click", "#btn-batal-update", function () {
+        $("#btn-action-add-sub").html(`<button class="btn btn-primary btn-md" id="btn-add-sub">Tambah Sub Kriteria</button>`)
+        $("#sub_kriteria").val("")
+        $("#bobot-sub").val("")
     })
     //Hendler Error
     function displayErrors(errors) {

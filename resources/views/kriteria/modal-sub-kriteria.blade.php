@@ -10,9 +10,10 @@
             </div>
             <div class="modal-body">
                 <div class="card">
-                    <input type="hidden" id="uuid_kriteria">
+                    <input type="hidden" id="kriteria_uuid">
                     <div class="card-header">
                         <form action="javascript:;" class="d-inline" id="form-sub-kriteria">
+                            <input type="hidden" name="current_uuid" id="current_uuid_sub">
                             @csrf
                             <div class="row">
                                 <div class="col-sm-4">

@@ -10,7 +10,7 @@ class SubKriteria extends Model
     use HasFactory;
     protected $guarded = ['id'];
 
-    public function getRouteKeyName(): string
+    public function getRouteKeyName()
     {
         return 'uuid';
     }

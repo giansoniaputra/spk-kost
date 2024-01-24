@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\KriteriaController;
+use App\Http\Controllers\AlternatifController;
 use App\Http\Controllers\SubKriteriaController;
 
 /*
@@ -28,3 +29,10 @@ Route::get('/kriteriaEdit/{kreteria:uuid}', [KriteriaController::class, 'edit'])
 // SUB KRITERIA
 Route::resource('/subKriteria', SubKriteriaController::class);
 Route::get('/dataTablesSubKriteria', [SubKriteriaController::class, 'dataTablesSubKriteria']);
+// Alternatif
+Route::get('alternatif', [AlternatifController::class, 'index']);
+Route::get('/dataTablesAlternatif', [AlternatifController::class, 'dataTablesAlternatif']);
+Route::post('/alternatif-store', [AlternatifController::class, 'store']);
+Route::get('/alternatif-edit/{alternatif:uuid}', [AlternatifController::class, 'edit']);
+Route::post('/alternatif-update/{alternatif:uuid}', [AlternatifController::class, 'update']);
+Route::post('/alternatif-destroy/{alternatif:uuid}', [AlternatifController::class, 'destroy']);

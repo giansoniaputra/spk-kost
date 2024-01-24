@@ -196,6 +196,14 @@
                         </p>
                     </a>
                 </li>
+                <li class="nav-item">
+                    <a href="/alternatif" class="nav-link">
+                        <i class="nav-icon far fa-image"></i>
+                        <p>
+                            Alternatif
+                        </p>
+                    </a>
+                </li>
             </ul>
         </nav>
         <!-- /.sidebar-menu -->

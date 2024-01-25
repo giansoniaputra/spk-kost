@@ -32,7 +32,7 @@
                         @else
                         @foreach ($alternatifs as $alternatif)
                         <tr>
-                            <td>{{ $alternatif->alternatif }}</td>
+                            <td>A{{ $alternatif->alternatif }}</td>
                             <td>{{ $alternatif->keterangan }}</td>
                             @foreach($kriterias as $kriteria)
                             @php

@@ -13,8 +13,8 @@
                     @csrf
                     <input type="hidden" id="current_uuid">
                     <div class="form-group mb-3">
-                        <label for="alternatif">Alternatif</label>
-                        <input type="text" id="alternatif" name="alternatif" class="form-control" placeholder="masukan Alternatif">
+                        <label for="alternatif">Alternatif Ke-</label>
+                        <input type="number" id="alternatif" name="alternatif" class="form-control" placeholder="Masukan Hanya Angka Saja">
                     </div>
                     <div class="form-group mb-3">
                         <label for="keterangan">Keterangan</label>

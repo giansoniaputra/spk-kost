@@ -79,6 +79,9 @@ class AlternatifController extends Controller
     public function dataTablesAlternatif()
     {
         $query = Alternatif::all();
+        foreach ($query as $row) {
+            $row->alternatif = "A" . $row->alternatif;
+        }
         return DataTables::of($query)->addColumn('action', function ($row) {
             $actionBtn =
                 '

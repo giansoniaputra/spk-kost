@@ -73,13 +73,13 @@ class PerhitunganMooraController extends Controller
         $pembagi = [];
         foreach ($kuadrat as $row) {
             $jumlah = array_sum($row);
-            $akarKuadrat = floatval(number_format(sqrt($jumlah), 5));
+            $akarKuadrat = floatval(number_format(sqrt($jumlah), 3));
             $pembagi[] = $akarKuadrat;
         }
         $hasil = [];
         foreach ($pembilang as $row => $val) {
             $hasil[$row] = array_map(function ($value) use ($row, $pembagi) {
-                return floatval(number_format($value / $pembagi[$row], 5));
+                return floatval(number_format($value / $pembagi[$row], 3));
             }, $val);
         }
         return response()->json(['hasil' => $hasil]);
@@ -97,7 +97,7 @@ class PerhitunganMooraController extends Controller
         $result_array = [];
         for ($i = 0; $i < count($data); $i++) {
             for ($j = 0; $j < count($bobot); $j++) {
-                $result_array[] = floatval(number_format($data[$i][$j] * $bobot[$j], 5));
+                $result_array[] = floatval(number_format($data[$i][$j] * $bobot[$j], 3));
             }
         }
         $final_result = array_chunk($result_array, $kriterias->count('id'));
@@ -115,14 +115,26 @@ class PerhitunganMooraController extends Controller
         // 4 | 0.098058068	0.04472136	0.08479983	0.036380344	0.041602515	0.029172998	0.050709255	0.054772256
         $result = [];
 
-        // Loop melalui setiap array
+        // // Loop melalui setiap array (SIPA)
+        // for ($k = 0; $k < count($final_result); $k++) {
+        //     for ($l = 0; $l < count($bobot); $l++) {
+        //         $jumlah = 0;
+        //         if ($atribut[$l] == 'BENEFIT') {
+        //             $jumlah += $final_result[$k][$l];
+        //         } else {
+        //             $jumlah -= $final_result[$k][$l];
+        //         }
+        //         $rangking[] = $jumlah;
+        //     }
+        // }
+        // Loop melalui setiap array (RIZAL)
         for ($k = 0; $k < count($final_result); $k++) {
             for ($l = 0; $l < count($bobot); $l++) {
                 $jumlah = 0;
                 if ($atribut[$l] == 'BENEFIT') {
                     $jumlah += $final_result[$k][$l];
                 } else {
-                    $jumlah -= $final_result[$k][$l];
+                    $jumlah += $final_result[$k][$l];
                 }
                 $rangking[] = $jumlah;
             }
@@ -133,9 +145,28 @@ class PerhitunganMooraController extends Controller
         for ($u = 0; $u < count($rangking_result); $u++) {
             $final_ranking[] = array_sum($rangking_result[$u]);
         }
+
+        $nama = Alternatif::orderBy('alternatif', 'asc')->get();
+        $rangking_assoc = [];
+        foreach ($final_ranking as $index => $nilai) {
+            $rangking_assoc[] = [$nama[$index]->keterangan, $nilai];
+        }
+
+        $names = array_column($rangking_assoc, 0);
+        $scores = array_column($rangking_assoc, 1);
+
+        // Menggunakan array_multisort untuk mengurutkan scores secara menurun
+        array_multisort($scores, SORT_DESC, $names);
+
+        // Menggabungkan kembali array setelah diurutkan
+        $result2 = array_map(function ($name, $score) {
+            return [$name, $score];
+        }, $names, $scores);
+
+
         return response()->json([
             'result' => $final_result,
-            'hasil' => $final_ranking
+            'hasil' => $result2
         ]);
     }
 }

@@ -89,7 +89,7 @@ $(document).ready(function () {
                     table += "<tr><td>A" + (i + 1) + "</td>";
 
                     for (let j = 0; j < transposedMatrix[i].length; j++) {
-                        table += "<td>" + transposedMatrix[i][j].toFixed(4) + "</td>";
+                        table += "<td>" + transposedMatrix[i][j].toFixed(3) + "</td>";
                     }
 
                     table += "</tr>";
@@ -123,11 +123,11 @@ $(document).ready(function () {
                         table2 += "</tr>";
 
                         // Mengisi tabel dengan data response.result
-                        for (let i = 0; i < response.result.length; i++) {
+                        for (let i = 0; i < response.result[0].length; i++) {
                             table2 += "<tr><td>A" + (i + 1) + "</td>";
 
                             for (let j = 0; j < response.result[i].length; j++) {
-                                table2 += "<td>" + response.result[i][j].toFixed(4) + "</td>";
+                                table2 += "<td>" + response.result[i][j].toFixed(3) + "</td>";
                             }
 
                             table2 += "</tr>";
@@ -136,49 +136,76 @@ $(document).ready(function () {
                         table2 += "</table></div></div></div></div>";
                         $("#nilai-preferensi").html(table2)
 
-                        response.hasil.sort((a, b) => b - a);
 
-                        // Membuat elemen tabel
-                        const table = document.createElement("table");
-                        table.classList.add("table", "table-bordered", "table-hover", "dtr-inline");
-                        // Membuat elemen thead
-                        const thead = table.createTHead();
-                        const headerRow = thead.insertRow();
-                        const headers = ["Alternatif", "Hasil", "Ranking"];
-
-                        // Menambahkan kolom ke thead
-                        headers.forEach((headerText) => {
-                            const th = document.createElement("th");
-                            th.textContent = headerText;
-                            headerRow.appendChild(th);
+                        let table3 = `<div class="row">
+                                        <div class="col-sm-12">
+                                            <div class="card">
+                                                <div class="card-header">
+                                                    <h2>Hasil Ranking</h2>
+                                                </div>
+                                            <div class="card-body">
+                                                <table class='table table-bordered table-hover dtr-inline'>
+                                                    <tr>
+                                                        <th>Alternatif</th>
+                                                        <th>Nilai</th>
+                                                        <th>Peringkat</th>
+                                                    </tr>
+                                                    <tbody>
+                                                    `
+                        response.hasil.map((a, b) => {
+                            table3 += `<tr>
+                                            <td>${a[0]}</td>
+                                            <td>${a[1].toFixed(3)}</td>
+                                            <td>${(b + 1)}</td>
+                                        </tr>
+                                        `
                         });
+                        table3 += "</tbody></table></div></div></div></div></div></div>";
 
-                        // Mendapatkan referensi ke elemen tbody
-                        const tbody = table.createTBody();
+                        $("#rangking").html(table3);
 
-                        // Membuat baris tabel untuk setiap elemen dalam array
-                        response.hasil.forEach((value, index) => {
-                            // Membuat elemen baris
-                            const row = tbody.insertRow();
+                        // // Membuat elemen tabel
+                        // const table = document.createElement("table");
+                        // table.classList.add("table", "table-bordered", "table-hover", "dtr-inline");
+                        // // Membuat elemen thead
+                        // const thead = table.createTHead();
+                        // const headerRow = thead.insertRow();
+                        // const headers = ["Alternatif", "Hasil", "Ranking"];
 
-                            // Membuat sel untuk nomor urut
-                            const cellNo = row.insertCell(0);
-                            cellNo.textContent = "A" + (index + 1);
+                        // // Menambahkan kolom ke thead
+                        // headers.forEach((headerText) => {
+                        //     const th = document.createElement("th");
+                        //     th.textContent = headerText;
+                        //     headerRow.appendChild(th);
+                        // });
 
-                            // Membuat sel untuk index
-                            const cellIndex = row.insertCell(1);
-                            cellIndex.textContent = value;
+                        // // Mendapatkan referensi ke elemen tbody
+                        // const tbody = table.createTBody();
 
-                            // Membuat sel untuk nilai dalam array
-                            const cellValue = row.insertCell(2);
-                            cellValue.textContent = index + 1;
-                        });
+                        // // Membuat baris tabel untuk setiap elemen dalam array
+                        // response.hasil.forEach((value, index) => {
+                        //     // Membuat elemen baris
+                        //     const row = tbody.insertRow();
 
-                        // Mendapatkan referensi ke elemen div dengan ID "ranking" dalam HTML
-                        const rankingDiv = document.getElementById("rangking");
+                        //     // Membuat sel untuk nomor urut
+                        //     const cellNo = row.insertCell(0);
+                        //     cellNo.textContent = "A" + (index + 1);
 
-                        // Menambahkan tabel ke dalam div
-                        rankingDiv.appendChild(table);
+                        //     // Membuat sel untuk index
+                        //     const cellIndex = row.insertCell(1);
+                        //     cellIndex.textContent = value.toFixed(3);
+
+                        //     // Membuat sel untuk nilai dalam array
+                        //     const cellValue = row.insertCell(2);
+                        //     cellValue.textContent = index + 1;
+                        // });
+
+                        // // Mendapatkan referensi ke elemen div dengan ID "ranking" dalam HTML
+                        // document.getElementById("rangking").innerHTML = "";
+                        // const rankingDiv = document.getElementById("rangking");
+
+                        // // Menambahkan tabel ke dalam div
+                        // rankingDiv.appendChild(table);
                     }
                 });
 

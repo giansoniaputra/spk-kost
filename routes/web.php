@@ -3,7 +3,9 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\KriteriaController;
 use App\Http\Controllers\AlternatifController;
+use App\Http\Controllers\PerhitunganMooraController;
 use App\Http\Controllers\SubKriteriaController;
+use App\Models\PerhitunganMoora;
 
 /*
 |--------------------------------------------------------------------------
@@ -36,3 +38,9 @@ Route::post('/alternatif-store', [AlternatifController::class, 'store']);
 Route::get('/alternatif-edit/{alternatif:uuid}', [AlternatifController::class, 'edit']);
 Route::post('/alternatif-update/{alternatif:uuid}', [AlternatifController::class, 'update']);
 Route::post('/alternatif-destroy/{alternatif:uuid}', [AlternatifController::class, 'destroy']);
+// Perhitunga Moora
+Route::get('/moora', [PerhitunganMooraController::class, 'index']);
+Route::get('/moora-create', [PerhitunganMooraController::class, 'create']);
+Route::get('/moora-update/{moora:uuid}', [PerhitunganMooraController::class, 'update']);
+Route::get('/moora-normalisasi', [PerhitunganMooraController::class, 'normalisasi']);
+Route::get('/moora-preferensi', [PerhitunganMooraController::class, 'preferensi']);

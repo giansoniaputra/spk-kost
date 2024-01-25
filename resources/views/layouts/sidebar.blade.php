@@ -204,6 +204,14 @@
                         </p>
                     </a>
                 </li>
+                <li class="nav-item">
+                    <a href="/moora" class="nav-link">
+                        <i class="nav-icon far fa-image"></i>
+                        <p>
+                            Perhitungan Moora
+                        </p>
+                    </a>
+                </li>
             </ul>
         </nav>
         <!-- /.sidebar-menu -->

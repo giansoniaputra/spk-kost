@@ -251,6 +251,7 @@ $(document).ready(function () {
             type: "GET",
             dataType: 'json',
             success: function (response) {
+                $("#sub_kriteria").focus()
                 $("#sub_kriteria").val(response.data.sub_kriteria);
                 $("#bobot-sub").val(response.data.bobot);
                 $("#btn-action-add-sub").html(`<button class="btn btn-warning text-white btn-md mr-2" id="btn-update-sub">Update Sub Kriteria</button><button class="btn btn-danger btn-md" id="btn-batal-update"><i class="far fa-times-circle"></i></button>`)

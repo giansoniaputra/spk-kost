@@ -73,13 +73,13 @@ class PerhitunganMooraController extends Controller
         $pembagi = [];
         foreach ($kuadrat as $row) {
             $jumlah = array_sum($row);
-            $akarKuadrat = floatval(number_format(sqrt($jumlah), 3));
+            $akarKuadrat = floatval(number_format(sqrt($jumlah), 5));
             $pembagi[] = $akarKuadrat;
         }
         $hasil = [];
         foreach ($pembilang as $row => $val) {
             $hasil[$row] = array_map(function ($value) use ($row, $pembagi) {
-                return floatval(number_format($value / $pembagi[$row], 3));
+                return floatval(number_format($value / $pembagi[$row], 5));
             }, $val);
         }
         return response()->json(['hasil' => $hasil]);
@@ -97,10 +97,45 @@ class PerhitunganMooraController extends Controller
         $result_array = [];
         for ($i = 0; $i < count($data); $i++) {
             for ($j = 0; $j < count($bobot); $j++) {
-                $result_array[] = floatval(number_format($data[$i][$j] * $bobot[$j], 3));
+                $result_array[] = floatval(number_format($data[$i][$j] * $bobot[$j], 5));
             }
         }
         $final_result = array_chunk($result_array, $kriterias->count('id'));
-        return response()->json(['result' => $final_result]);
+        $rangking = [];
+        $atribut = [];
+        foreach ($kriterias->get() as $row) {
+            $atribut[] = $row->atribut;
+        }
+        //     COST   0     BENEFIT 1    COST 2      BENEFIT 3    BENEFIT 4   BENEFIT 5   BENEFIT 6  BENEFIT  7
+        // -----------------------------------------------------------------------------------------------------
+        // 0 | 0.098058068	0.04472136	0.08479983	0.060633906	0.05547002	0.043759497	0.050709255	0.036514837
+        // 1 | 0.098058068	0.04472136	0.08479983	0.036380344	0.041602515	0.058345997	0.050709255	0.036514837
+        // 2 | 0.098058068	0.04472136	0.08479983	0.036380344	0.041602515	0.043759497	0.03380617	0.054772256
+        // 3 | 0.039223227	0.04472136	0.105999788	0.048507125	0.041602515	0.043759497	0.03380617	0.036514837
+        // 4 | 0.098058068	0.04472136	0.08479983	0.036380344	0.041602515	0.029172998	0.050709255	0.054772256
+        $result = [];
+
+        // Loop melalui setiap array
+        for ($k = 0; $k < count($final_result); $k++) {
+            for ($l = 0; $l < count($bobot); $l++) {
+                $jumlah = 0;
+                if ($atribut[$l] == 'BENEFIT') {
+                    $jumlah += $final_result[$k][$l];
+                } else {
+                    $jumlah -= $final_result[$k][$l];
+                }
+                $rangking[] = $jumlah;
+            }
+        }
+
+        $rangking_result = array_chunk($rangking, $kriterias->count('id'));
+        $final_ranking = [];
+        for ($u = 0; $u < count($rangking_result); $u++) {
+            $final_ranking[] = array_sum($rangking_result[$u]);
+        }
+        return response()->json([
+            'result' => $final_result,
+            'hasil' => $final_ranking
+        ]);
     }
 }

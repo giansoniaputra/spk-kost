@@ -104,6 +104,7 @@ $(document).ready(function () {
                     type: "GET",
                     dataType: 'json',
                     success: function (response) {
+                        console.log(response);
                         // Membuat tabel HTML
                         let table2 = `<div class="row">
                                         <div class="col-sm-12">
@@ -134,6 +135,50 @@ $(document).ready(function () {
 
                         table2 += "</table></div></div></div></div>";
                         $("#nilai-preferensi").html(table2)
+
+                        response.hasil.sort((a, b) => b - a);
+
+                        // Membuat elemen tabel
+                        const table = document.createElement("table");
+                        table.classList.add("table", "table-bordered", "table-hover", "dtr-inline");
+                        // Membuat elemen thead
+                        const thead = table.createTHead();
+                        const headerRow = thead.insertRow();
+                        const headers = ["Alternatif", "Hasil", "Ranking"];
+
+                        // Menambahkan kolom ke thead
+                        headers.forEach((headerText) => {
+                            const th = document.createElement("th");
+                            th.textContent = headerText;
+                            headerRow.appendChild(th);
+                        });
+
+                        // Mendapatkan referensi ke elemen tbody
+                        const tbody = table.createTBody();
+
+                        // Membuat baris tabel untuk setiap elemen dalam array
+                        response.hasil.forEach((value, index) => {
+                            // Membuat elemen baris
+                            const row = tbody.insertRow();
+
+                            // Membuat sel untuk nomor urut
+                            const cellNo = row.insertCell(0);
+                            cellNo.textContent = "A" + (index + 1);
+
+                            // Membuat sel untuk index
+                            const cellIndex = row.insertCell(1);
+                            cellIndex.textContent = value;
+
+                            // Membuat sel untuk nilai dalam array
+                            const cellValue = row.insertCell(2);
+                            cellValue.textContent = index + 1;
+                        });
+
+                        // Mendapatkan referensi ke elemen div dengan ID "ranking" dalam HTML
+                        const rankingDiv = document.getElementById("rangking");
+
+                        // Menambahkan tabel ke dalam div
+                        rankingDiv.appendChild(table);
                     }
                 });
 

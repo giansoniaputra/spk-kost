@@ -81,5 +81,17 @@
 </div>
 <div id="matrix-normalisasi"></div>
 <div id="nilai-preferensi"></div>
+<div class="row">
+    <div class="col-sm-12">
+        <div class="card">
+            <div class="card-header">
+                <h2>Nilai Preferensi</h2>
+            </div>
+            <div class="card-body">
+                <div id="rangking"></div>
+            </div>
+        </div>
+    </div>
+</div>
 <script src="/ex-script/moora.js"></script>
 @endsection

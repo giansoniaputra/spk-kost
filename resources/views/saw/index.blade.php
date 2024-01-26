@@ -20,7 +20,7 @@
                         </tr>
                         <tr>
                             @foreach ($kriterias as $row)
-                            <th class="tetx-center">{{ $row->kode }}</th>
+                            <th class="tetx-center">{{ "C".$row->kode }}</th>
                             @endforeach
                         </tr>
                     </thead>

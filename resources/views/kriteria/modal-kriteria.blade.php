@@ -12,9 +12,12 @@
                 <input type="hidden" id="uuid">
                 <form action="javascript:;" id="form-kriteria">
                     @csrf
-                    <div class="form-group mb-3">
-                        <label for="kode">Kode</label>
-                        <input type="text" id="kode" name="kode" class="form-control">
+                    <label for="kode">Kode</label>
+                    <div class="input-group mb-3">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text">C</span>
+                        </div>
+                        <input type="number" id="kode" name="kode" class="form-control">
                     </div>
                     <div class="form-group mb-3">
                         <label for="kriteria">Kriteria</label>

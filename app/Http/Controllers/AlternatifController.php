@@ -21,11 +21,12 @@ class AlternatifController extends Controller
     public function store(Request $request)
     {
         $rules = [
-            'alternatif' => 'required',
+            'alternatif' => 'required|unique:alternatifs',
             'keterangan' => 'required',
         ];
         $pesan = [
             'alternatif.required' => 'Alternatif tidak boleh kosong!',
+            'alternatif.unique' => 'Alternatif sudah ada!',
             'keterangan.required' => 'Ketarangan tidak boleh kosong!',
         ];
         $validator = Validator::make($request->all(), $rules, $pesan);
@@ -57,6 +58,15 @@ class AlternatifController extends Controller
             'alternatif.required' => 'Alternatif tidak boleh kosong!',
             'keterangan.required' => 'Ketarangan tidak boleh kosong!',
         ];
+        $cek = Alternatif::where('uuid', $request->uuid)->first();
+        if ($cek->alternatif == $request->alternatif) {
+            $rules['alternatif'] = 'required';
+            $pesan['alternatif.required'] = 'alternatif tidak boleh kosong';
+        } else {
+            $rules['alternatif'] = 'required|unique:alternatifs';
+            $pesan['alternatif.unique'] = 'alternatif sudah ada';
+            $pesan['alternatif.required'] = 'alternatif tidak boleh kosong';
+        }
         $validator = Validator::make($request->all(), $rules, $pesan);
         if ($validator->fails()) {
             return response()->json(['errors' => $validator->errors()]);

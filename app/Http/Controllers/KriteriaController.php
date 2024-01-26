@@ -53,7 +53,7 @@ class KriteriaController extends Controller
         } else {
             $data = [
                 'uuid' => Str::orderedUuid(),
-                'kode' => strtoupper($request->kode),
+                'kode' => $request->kode,
                 'kriteria' => $request->kriteria,
                 'atribut' => $request->atribut,
                 'bobot' => $request->bobot,
@@ -134,6 +134,7 @@ class KriteriaController extends Controller
         $query = Kriteria::all();
         foreach ($query as $row) {
             $row->bobot = Kriteria::bobot($row->bobot);
+            $row->kode = 'C' . $row->kode;
         }
         return DataTables::of($query)->addColumn('action', function ($row) {
             $actionBtn =

@@ -11,9 +11,12 @@
             <div class="modal-body">
                 <form action="javascript:;" id="form-alternatif">
                     @csrf
-                    <input type="hidden" id="current_uuid">
-                    <div class="form-group mb-3">
-                        <label for="alternatif">Alternatif Ke-</label>
+                    <input type="hidden" name="uuid" id="current_uuid">
+                    <label for="alternatif">Alternatif</label>
+                    <div class="input-group mb-3">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text">A</span>
+                        </div>
                         <input type="number" id="alternatif" name="alternatif" class="form-control" placeholder="Masukan Hanya Angka Saja">
                     </div>
                     <div class="form-group mb-3">

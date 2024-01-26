@@ -26,6 +26,21 @@ class PerhitunganMooraController extends Controller
         return view('moora.index', $data);
     }
 
+    public function index_saw()
+    {
+        $data = [
+            'title' => 'Perhitungan SAW',
+            'mooras' => DB::table('perhitungan_mooras as a')
+                ->join('alternatifs as b', 'a.alternatif_uuid', '=', 'b.uuid')
+                ->select('a.*', 'b.alternatif', 'b.keterangan')
+                ->orderBy('b.alternatif', 'asc'),
+            'kriterias' => Kriteria::orderBy('kode', 'asc')->get(),
+            'alternatifs' => Alternatif::orderBy('alternatif', 'asc')->get(),
+            'sum_kriteria' => Kriteria::count('id'),
+        ];
+        return view('saw.index', $data);
+    }
+
     public function create()
     {
         $count = PerhitunganMoora::count('id');

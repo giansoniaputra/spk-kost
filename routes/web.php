@@ -44,3 +44,4 @@ Route::get('/moora-create', [PerhitunganMooraController::class, 'create']);
 Route::get('/moora-update/{moora:uuid}', [PerhitunganMooraController::class, 'update']);
 Route::get('/moora-normalisasi', [PerhitunganMooraController::class, 'normalisasi']);
 Route::get('/moora-preferensi', [PerhitunganMooraController::class, 'preferensi']);
+Route::get('/saw', [PerhitunganMooraController::class, 'index_saw']);

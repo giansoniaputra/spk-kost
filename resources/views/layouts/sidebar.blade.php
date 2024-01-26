@@ -212,6 +212,14 @@
                         </p>
                     </a>
                 </li>
+                <li class="nav-item">
+                    <a href="/saw" class="nav-link">
+                        <i class="nav-icon far fa-image"></i>
+                        <p>
+                            Perhitungan SAW
+                        </p>
+                    </a>
+                </li>
             </ul>
         </nav>
         <!-- /.sidebar-menu -->

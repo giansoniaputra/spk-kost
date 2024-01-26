@@ -43,24 +43,55 @@ class PerhitunganMooraController extends Controller
 
     public function create()
     {
-        $count = PerhitunganMoora::count('id');
-        if ($count > 0) {
-            DB::table('perhitungan_mooras')->truncate();
-        }
-        $kriterias = Kriteria::orderBy('kode', 'asc')->get();
-        $alternatifs = Alternatif::orderBy('alternatif', 'asc')->get();
-        foreach ($alternatifs as $alternatif) {
-            foreach ($kriterias as $kriteria) {
-                $data = [
-                    'uuid' => Str::orderedUuid(),
-                    'alternatif_uuid' => $alternatif->uuid,
-                    'kriteria_uuid' => $kriteria->uuid,
-                    'bobot' => 0
-                ];
-                PerhitunganMoora::create($data);
+        $cek = PerhitunganMoora::first();
+        if (!$cek) {
+            $kriterias = Kriteria::orderBy('kode', 'asc')->get();
+            $alternatifs = Alternatif::orderBy('alternatif', 'asc')->get();
+            foreach ($alternatifs as $alternatif) {
+                foreach ($kriterias as $kriteria) {
+                    $data = [
+                        'uuid' => Str::orderedUuid(),
+                        'alternatif_uuid' => $alternatif->uuid,
+                        'kriteria_uuid' => $kriteria->uuid,
+                        'bobot' => 0
+                    ];
+                    PerhitunganMoora::create($data);
+                }
             }
+            return response()->json(['success' => 'Perhitungan Baru Berhasil Ditambahkan! Silahkan Masukan Nilainya']);
+        } else {
+            $kriterias = Kriteria::orderBy('kode', 'asc')->get();
+            $alternatifs = Alternatif::orderBy('alternatif', 'asc')->get();
+            foreach ($alternatifs as $alternatif) {
+                $query = PerhitunganMoora::where('alternatif_uuid', $alternatif->uuid)->first();
+                if (!$query) {
+                    foreach ($kriterias as $kriteria) {
+                        $data = [
+                            'uuid' => Str::orderedUuid(),
+                            'alternatif_uuid' => $alternatif->uuid,
+                            'kriteria_uuid' => $kriteria->uuid,
+                            'bobot' => 0
+                        ];
+                        PerhitunganMoora::create($data);
+                    }
+                }
+            }
+            foreach ($kriterias as $kriteria) {
+                $query = PerhitunganMoora::where('kriteria_uuid', $kriteria->uuid)->first();
+                if (!$query) {
+                    foreach ($alternatifs as $alternatif) {
+                        $data = [
+                            'uuid' => Str::orderedUuid(),
+                            'alternatif_uuid' => $alternatif->uuid,
+                            'kriteria_uuid' => $kriteria->uuid,
+                            'bobot' => 0
+                        ];
+                        PerhitunganMoora::create($data);
+                    }
+                }
+            }
+            return response()->json(['success' => 'Perhitungan Baru Berhasil Ditambahkan! Silahkan Masukan Nilainya']);
         }
-        return response()->json(['success' => 'Perhitungan Baru Berhasil Ditambahkan! Silahkan Masukan Nilainya']);
     }
 
     public function update(PerhitunganMoora $moora, Request $request)

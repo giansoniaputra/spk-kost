@@ -59,7 +59,7 @@
                 <li class="nav-item">
                     <a href="/" class="nav-link">
                         <i class="fas fa-columns"></i>
-                        <p>
+                        <p>&nbsp;
                             Dashboard
                         </p>
                     </a>
@@ -68,7 +68,7 @@
                 <li class="nav-item">
                     <a href="/kriteria" class="nav-link">
                         <i class="fas fa-copyright"></i>
-                        <p>
+                        <p>&nbsp;
                             Kriteria
                         </p>
                     </a>
@@ -76,7 +76,7 @@
                 <li class="nav-item">
                     <a href="/alternatif" class="nav-link">
                         <i class="fas fa-list"></i>
-                        <p>
+                        <p>&nbsp;
                             Alternatif
                         </p>
                     </a>
@@ -85,7 +85,7 @@
                 <li class="nav-item">
                     <a href="/moora" class="nav-link">
                         <i class="fas fa-calculator"></i>
-                        <p>
+                        <p>&nbsp;
                             Perhitungan Moora
                         </p>
                     </a>
@@ -93,8 +93,17 @@
                 <li class="nav-item">
                     <a href="/saw" class="nav-link">
                         <i class="fas fa-calculator"></i>
-                        <p>
+                        <p>&nbsp;
                             Perhitungan SAW
+                        </p>
+                    </a>
+                </li>
+                <li class="nav-header">User</li>
+                <li class="nav-item">
+                    <a href="/register" class="nav-link">
+                        <i class="fas fa-users"></i>
+                        <p>&nbsp;
+                            Register User
                         </p>
                     </a>
                 </li>

@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Alternatif;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
+use App\Models\PerhitunganMoora;
 use Yajra\DataTables\Facades\DataTables;
 use Illuminate\Support\Facades\Validator;
 
@@ -83,6 +84,7 @@ class AlternatifController extends Controller
     public function destroy(Alternatif $alternatif)
     {
         Alternatif::destroy($alternatif->id);
+        PerhitunganMoora::where('alternatif_uuid', $alternatif->uuid)->delete();
         return response()->json(['success' => 'Alternatif Berhasil Di Hapus!']);
     }
 

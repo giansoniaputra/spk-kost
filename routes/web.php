@@ -41,6 +41,10 @@ Route::get('/home', function () {
 Route::get('/auth', [AuthController::class, 'index'])->name('login')->middleware('guest');
 Route::post('/authenticate', [AuthController::class, 'authenticate']);
 Route::get('/logout', [AuthController::class, 'logout']);
+Route::get('/register', [AuthController::class, 'register']);
+Route::post('/register-create', [AuthController::class, 'create']);
+Route::get('/dataTablesUser', [AuthController::class, 'dataTables'])->middleware('auth');
+
 // KRITERIA
 Route::resource('/kriteria', KriteriaController::class)->middleware('auth');
 Route::get('/dataTablesKriteria', [KriteriaController::class, 'dataTablesKriteria'])->middleware('auth');

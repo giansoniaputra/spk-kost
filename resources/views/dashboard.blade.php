@@ -1,47 +1,53 @@
 @extends('layouts.main')
 @section('container')
 <div class="row">
-    <div class="col-lg-3 col-6">
-
-        <div class="small-box bg-info">
-            <div class="inner">
-                <h3>{{ $alternatif }}</h3>
-                <p>Alternatif</p>
+    <div class="col-sm-4">
+        <div class="card border-left-primary shadow h-100 py-2">
+            <div class="card-body">
+                <div class="row no-gutters align-items-center">
+                    <div class="col mr-2">
+                        <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
+                            Alternatif</div>
+                        <div class="h5 mb-0 font-weight-bold text-gray-800">{{ $alternatif }}</div>
+                    </div>
+                    <div class="col-auto">
+                        <i class="fas fa-calendar fa-2x text-gray-300"></i>
+                    </div>
+                </div>
             </div>
-            <div class="icon">
-                <i class="ion ion-bag"></i>
-            </div>
-            <a href="/alternatif" class="small-box-footer">Selengkapnya <i class="fas fa-arrow-circle-right"></i></a>
         </div>
     </div>
-
-    <div class="col-lg-3 col-6">
-
-        <div class="small-box bg-success">
-            <div class="inner">
-                <h3>{{ $kriteria }}</h3>
-                <p>Kriteria</p>
+    <div class="col-sm-4">
+        <div class="card border-left-primary shadow h-100 py-2">
+            <div class="card-body">
+                <div class="row no-gutters align-items-center">
+                    <div class="col mr-2">
+                        <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
+                            Kriteria</div>
+                        <div class="h5 mb-0 font-weight-bold text-gray-800">{{ $kriteria }}</div>
+                    </div>
+                    <div class="col-auto">
+                        <i class="fas fa-calendar fa-2x text-gray-300"></i>
+                    </div>
+                </div>
             </div>
-            <div class="icon">
-                <i class="ion ion-stats-bars"></i>
-            </div>
-            <a href="/kriteria" class="small-box-footer">Selengkapnya <i class="fas fa-arrow-circle-right"></i></a>
         </div>
     </div>
-
-    <div class="col-lg-3 col-6">
-
-        <div class="small-box bg-warning">
-            <div class="inner">
-                <h3>{{ $alternatif }}</h3>
-                <p>Penilaian</p>
+    <div class="col-sm-4">
+        <div class="card border-left-primary shadow h-100 py-2">
+            <div class="card-body">
+                <div class="row no-gutters align-items-center">
+                    <div class="col mr-2">
+                        <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
+                            Perhitungan</div>
+                        <div class="h5 mb-0 font-weight-bold text-gray-800">{{ $alternatif }}</div>
+                    </div>
+                    <div class="col-auto">
+                        <i class="fas fa-calendar fa-2x text-gray-300"></i>
+                    </div>
+                </div>
             </div>
-            <div class="icon">
-                <i class="ion ion-person-add"></i>
-            </div>
-            <a href="/moora" class="small-box-footer">Selengkapnya <i class="fas fa-arrow-circle-right"></i></a>
         </div>
     </div>
-
 </div>
 @endsection

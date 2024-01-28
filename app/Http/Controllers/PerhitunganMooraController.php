@@ -161,30 +161,30 @@ class PerhitunganMooraController extends Controller
         // 4 | 0.098058068	0.04472136	0.08479983	0.036380344	0.041602515	0.029172998	0.050709255	0.054772256
         $result = [];
 
-        // // Loop melalui setiap array (SIPA)
-        // for ($k = 0; $k < count($final_result); $k++) {
-        //     for ($l = 0; $l < count($bobot); $l++) {
-        //         $jumlah = 0;
-        //         if ($atribut[$l] == 'BENEFIT') {
-        //             $jumlah += $final_result[$k][$l];
-        //         } else {
-        //             $jumlah -= $final_result[$k][$l];
-        //         }
-        //         $rangking[] = $jumlah;
-        //     }
-        // }
-        // Loop melalui setiap array (RIZAL)
+        // Loop melalui setiap array (SIPA)
         for ($k = 0; $k < count($final_result); $k++) {
             for ($l = 0; $l < count($bobot); $l++) {
                 $jumlah = 0;
                 if ($atribut[$l] == 'BENEFIT') {
                     $jumlah += $final_result[$k][$l];
                 } else {
-                    $jumlah += $final_result[$k][$l];
+                    $jumlah -= $final_result[$k][$l];
                 }
                 $rangking[] = $jumlah;
             }
         }
+        // // Loop melalui setiap array (RIZAL)
+        // for ($k = 0; $k < count($final_result); $k++) {
+        //     for ($l = 0; $l < count($bobot); $l++) {
+        //         $jumlah = 0;
+        //         if ($atribut[$l] == 'BENEFIT') {
+        //             $jumlah += $final_result[$k][$l];
+        //         } else {
+        //             $jumlah += $final_result[$k][$l];
+        //         }
+        //         $rangking[] = $jumlah;
+        //     }
+        // }
 
         $rangking_result = array_chunk($rangking, $kriterias->count('id'));
         $final_ranking = [];

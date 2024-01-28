@@ -2,7 +2,7 @@
 @section('container')
 <div class="row mb-2">
     <div class="col">
-        <button type="button" class="btn btn-primary" id="btn-add-perhitungan">Tambahkan Perhitungan Baru</button>
+        <button type="button" class="btn btn-primary" id="btn-add-perhitungan">Tambah Perhitungan SAW</button>
     </div>
 </div>
 <div class="row">

@@ -1,25 +1,27 @@
-@php
-use Illuminate\Support\Facades\DB;
-@endphp
 <!DOCTYPE html>
 <html lang="en">
 
 <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>{{ $title }} | Waroeng SS</title>
 
-    <!-- Google Font: Source Sans Pro -->
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
-    <!-- Font Awesome -->
-    <link rel="stylesheet" href="/assets/plugins/fontawesome-free/css/all.min.css">
-    <!-- DataTables -->
-    <link rel="stylesheet" href="/assets/plugins/datatables-bs4/css/dataTables.bootstrap4.min.css">
-    <link rel="stylesheet" href="/assets/plugins/datatables-responsive/css/responsive.bootstrap4.min.css">
-    <link rel="stylesheet" href="/assets/plugins/datatables-buttons/css/buttons.bootstrap4.min.css">
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>{{ $title }} | SPK KOST</title>
+
+    <!-- Custom fonts for this template -->
+    <link href="/assets/vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
+    <link href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i" rel="stylesheet">
+
+    <!-- Custom styles for this template -->
+    <link href="/assets/css/sb-admin-2.min.css" rel="stylesheet">
+
+    <!-- Custom styles for this page -->
+    <link href="/assets/vendor/datatables/dataTables.bootstrap4.min.css" rel="stylesheet">
     <link rel="stylesheet" href="/assets/sweetalert2.min.css">
     <!-- Theme style -->
-    <link rel="stylesheet" href="/assets/css/adminlte.min.css">
     <script src="/assets/jquery-3.7.1.min.js"></script>
     <script src="/assets/sweetalert2.all.min.js"></script>
     <style>
@@ -97,99 +99,137 @@ use Illuminate\Support\Facades\DB;
             </div>`;
 
     </script>
+
 </head>
 
-<body class="hold-transition sidebar-mini">
-    <div class="wrapper">
-        <!-- Navbar -->
+<body id="page-top">
+
+    <!-- Page Wrapper -->
+    <div id="wrapper">
+
+        <!-- Sidebar -->
         @include('layouts.sidebar')
-        <!-- /.navbar -->
+        <!-- End of Sidebar -->
 
+        <!-- Content Wrapper -->
+        <div id="content-wrapper" class="d-flex flex-column">
 
+            <!-- Main Content -->
+            <div id="content">
 
-        <!-- Content Wrapper. Contains page content -->
-        <div class="content-wrapper">
-            <!-- Content Header (Page header) -->
-            <section class="content-header">
+                <!-- Topbar -->
+                <nav class="navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow">
+
+                    <!-- Topbar Navbar -->
+                    <ul class="navbar-nav ml-auto">
+
+                        <!-- Nav Item - User Information -->
+                        <li class="nav-item dropdown no-arrow">
+                            <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <span class="mr-2 d-none d-lg-inline text-gray-600 small">{{ auth()->user()->name }}</span>
+                                <img class="img-profile rounded-circle" src="/assets/img/undraw_profile.svg">
+                            </a>
+                            <!-- Dropdown - User Information -->
+                            <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in" aria-labelledby="userDropdown">
+                                <div class="dropdown-divider"></div>
+                                <button class="dropdown-item logout" href="/logout">
+                                    <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>
+                                    Logout
+                                </button>
+                            </div>
+                        </li>
+
+                    </ul>
+
+                </nav>
+                <!-- End of Topbar -->
+
+                <!-- Begin Page Content -->
                 <div class="container-fluid">
-                    <div class="row mb-2">
-                        <div class="col-sm-6">
-                            <h1>{{ $title }}</h1>
-                        </div>
-                        <div class="col-sm-6">
-                            <ol class="breadcrumb float-sm-right">
-                                <li class="breadcrumb-item"><a href="#">Home</a></li>
-                                <li class="breadcrumb-item active">{{ $title }}</li>
-                            </ol>
-                        </div>
-                    </div>
-                </div><!-- /.container-fluid -->
-            </section>
 
-            <!-- Main content -->
-            <div id="spinner"></div>
-            <section class="content">
-                <div class="container-fluid">
                     @yield('container')
+
                 </div>
                 <!-- /.container-fluid -->
-            </section>
-            <!-- /.content -->
+
+            </div>
+            <!-- End of Main Content -->
+
+            <!-- Footer -->
+            <footer class="sticky-footer bg-white">
+                <div class="container my-auto">
+                    <div class="copyright text-center my-auto">
+                        <span>Copyright &copy; Your Website 2020</span>
+                    </div>
+                </div>
+            </footer>
+            <!-- End of Footer -->
+
         </div>
-        <!-- /.content-wrapper -->
-        <footer class="main-footer">
-            <strong>2024 Muhammad Rizal Nurfauzi</strong> © All rights reserved.
-        </footer>
+        <!-- End of Content Wrapper -->
 
-        <!-- Control Sidebar -->
-        <aside class="control-sidebar control-sidebar-dark">
-            <!-- Control sidebar content goes here -->
-        </aside>
-        <!-- /.control-sidebar -->
     </div>
-    <!-- ./wrapper -->
+    <!-- End of Page Wrapper -->
 
-    <!-- jQuery -->
-    <script src="/assets/plugins/jquery/jquery.min.js"></script>
-    <!-- Bootstrap 4 -->
-    <script src="/assets/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
-    <!-- DataTables  & Plugins -->
-    <script src="/assets/plugins/datatables/jquery.dataTables.min.js"></script>
-    <script src="/assets/plugins/datatables-bs4/js/dataTables.bootstrap4.min.js"></script>
-    <script src="/assets/plugins/datatables-responsive/js/dataTables.responsive.min.js"></script>
-    <script src="/assets/plugins/datatables-responsive/js/responsive.bootstrap4.min.js"></script>
-    <script src="/assets/plugins/datatables-buttons/js/dataTables.buttons.min.js"></script>
-    <script src="/assets/plugins/datatables-buttons/js/buttons.bootstrap4.min.js"></script>
-    <script src="/assets/plugins/jszip/jszip.min.js"></script>
-    <script src="/assets/plugins/pdfmake/pdfmake.min.js"></script>
-    <script src="/assets/plugins/pdfmake/vfs_fonts.js"></script>
-    <script src="/assets/plugins/datatables-buttons/js/buttons.html5.min.js"></script>
-    <script src="/assets/plugins/datatables-buttons/js/buttons.print.min.js"></script>
-    <script src="/assets/plugins/datatables-buttons/js/buttons.colVis.min.js"></script>
-    <!-- AdminLTE App -->
-    <script src="/assets/js/adminlte.min.js"></script>
-    <!-- AdminLTE for demo purposes -->
-    <!-- Page specific script -->
+    <!-- Scroll to Top Button-->
+    <a class="scroll-to-top rounded" href="#page-top">
+        <i class="fas fa-angle-up"></i>
+    </a>
+
+    <!-- Logout Modal-->
+    <div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Ready to Leave?</h5>
+                    <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">×</span>
+                    </button>
+                </div>
+                <div class="modal-body">Select "Logout" below if you are ready to end your current session.</div>
+                <div class="modal-footer">
+                    <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
+                    <a class="btn btn-primary" href="login.html">Logout</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap core JavaScript-->
+    <script src="/assets/vendor/jquery/jquery.min.js"></script>
+    <script src="/assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+
+    <!-- Core plugin JavaScript-->
+    <script src="/assets/vendor/jquery-easing/jquery.easing.min.js"></script>
+
+    <!-- Custom scripts for all pages-->
+    <script src="/assets/js/sb-admin-2.min.js"></script>
+
+    <!-- Page level plugins -->
+    <script src="/assets/vendor/datatables/jquery.dataTables.min.js"></script>
+    <script src="/assets/vendor/datatables/dataTables.bootstrap4.min.js"></script>
     <script>
-        $(function() {
-            $("#example1").DataTable({
-                "responsive": true
-                , "lengthChange": false
-                , "autoWidth": false
-                , "buttons": ["copy", "csv", "excel", "pdf", "print", "colvis"]
-            }).buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
-            $('#example2').DataTable({
-                "paging": true
-                , "lengthChange": false
-                , "searching": false
-                , "ordering": true
-                , "info": true
-                , "autoWidth": false
-                , "responsive": true
-            , });
-        });
+        let logout = document.querySelector('.logout')
+        logout.addEventListener('click', function() {
+            let unique = $(this).attr("data-unique");
+            let token = $(this).attr("data-token");
+            Swal.fire({
+                title: "Apakah Kamu Yakin?"
+                , text: "Anda akan keluar!"
+                , icon: "warning"
+                , showCancelButton: true
+                , confirmButtonColor: "#3085d6"
+                , cancelButtonColor: "#d33"
+                , confirmButtonText: "Yes, Keluar!"
+            , }).then((result) => {
+                if (result.isConfirmed) {
+                    document.location.href = '/logout';
+                }
+            });
+        })
 
     </script>
+
 </body>
 
 </html>

@@ -146,7 +146,7 @@
 
                 <!-- Begin Page Content -->
                 <div class="container-fluid">
-
+                    <h2 class="mb-2">{{ $title }}</h2>
                     @yield('container')
 
                 </div>

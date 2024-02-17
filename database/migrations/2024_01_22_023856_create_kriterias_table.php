@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('kriterias', function (Blueprint $table) {
             $table->id();
             $table->uuid('uuid')->unique();
-            $table->number('kode');
+            $table->integer('kode');
             $table->string('kriteria');
             $table->string('atribut');
             $table->float('bobot');

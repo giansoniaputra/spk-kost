@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('alternatifs', function (Blueprint $table) {
             $table->id();
             $table->uuid('uuid')->unique();
-            $table->number('alternatif');
+            $table->integer('alternatif');
             $table->string('keterangan');
             $table->timestamps();
         });

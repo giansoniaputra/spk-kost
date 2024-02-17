@@ -109,32 +109,32 @@ $(document).ready(function () {
                         $("#nilai-preferensi").html(table2)
 
 
-                        let table3 = `<div class="row">
-                                        <div class="col-sm-12">
-                                            <div class="card">
-                                                <div class="card-header">
-                                                    <h2>Hasil Ranking</h2>
-                                                </div>
-                                            <div class="card-body">
-                                                <table class='table table-bordered table-hover dtr-inline'>
-                                                    <tr>
-                                                        <th>Alternatif</th>
-                                                        <th>Nilai</th>
-                                                        <th>Peringkat</th>
-                                                    </tr>
-                                                    <tbody>
-                                                    `
-                        response.hasil.map((a, b) => {
-                            table3 += `<tr>
-                                            <td>${a[0]}</td>
-                                            <td>${a[1].toFixed(3)}</td>
-                                            <td>${(b + 1)}</td>
-                                        </tr>
-                                        `
-                        });
-                        table3 += "</tbody></table></div></div></div></div></div></div>";
+                        // let table3 = `<div class="row">
+                        //                 <div class="col-sm-12">
+                        //                     <div class="card">
+                        //                         <div class="card-header">
+                        //                             <h2>Hasil Ranking</h2>
+                        //                         </div>
+                        //                     <div class="card-body">
+                        //                         <table class='table table-bordered table-hover dtr-inline'>
+                        //                             <tr>
+                        //                                 <th>Alternatif</th>
+                        //                                 <th>Nilai</th>
+                        //                                 <th>Peringkat</th>
+                        //                             </tr>
+                        //                             <tbody>
+                        //                             `
+                        // response.hasil.map((a, b) => {
+                        //     table3 += `<tr>
+                        //                     <td>${a[0]}</td>
+                        //                     <td>${a[1].toFixed(3)}</td>
+                        //                     <td>${(b + 1)}</td>
+                        //                 </tr>
+                        //                 `
+                        // });
+                        // table3 += "</tbody></table></div></div></div></div></div></div>";
 
-                        $("#rangking").html(table3);
+                        // $("#rangking").html(table3);
 
 
                     }

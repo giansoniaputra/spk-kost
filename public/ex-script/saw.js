@@ -98,8 +98,8 @@ $(document).ready(function () {
                         for (let i = 0; i < response.result[0].length; i++) {
                             table2 += "<tr><td>A" + (i + 1) + "</td>";
 
-                            for (let j = 0; j < response.result[i].length; j++) {
-                                table2 += "<td>" + response.result[i][j].toFixed(3) + "</td>";
+                            for (let j = 0; j < response.result[0].length; j++) {
+                                table2 += "<td>" + response.result[0][j].toFixed(3) + "</td>";
                             }
 
                             table2 += "</tr>";

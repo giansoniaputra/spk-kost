@@ -63,6 +63,6 @@ Route::post('/alternatif-destroy/{alternatif:uuid}', [AlternatifController::clas
 Route::get('/moora', [PerhitunganMooraController::class, 'index'])->middleware('auth');
 Route::get('/moora-create', [PerhitunganMooraController::class, 'create'])->middleware('auth');
 Route::get('/moora-update/{moora:uuid}', [PerhitunganMooraController::class, 'update'])->middleware('auth');
-Route::get('/moora-normalisasi', [PerhitunganMooraController::class, 'normalisasi'])->middleware('auth');
+Route::get('/saw-normalisasi', [PerhitunganMooraController::class, 'normalisasi'])->middleware('auth');
 Route::get('/moora-preferensi', [PerhitunganMooraController::class, 'preferensi'])->middleware('auth');
 Route::get('/saw', [PerhitunganMooraController::class, 'index_saw'])->middleware('auth');

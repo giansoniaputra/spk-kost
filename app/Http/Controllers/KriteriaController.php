@@ -135,7 +135,7 @@ class KriteriaController extends Controller
     {
         $query = Kriteria::all();
         foreach ($query as $row) {
-            $row->bobot = Kriteria::bobot($row->bobot);
+            $row->bobot = $row->bobot;
             $row->kode = 'C' . $row->kode;
         }
         return DataTables::of($query)->addColumn('action', function ($row) {

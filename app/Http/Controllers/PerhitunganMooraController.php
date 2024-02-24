@@ -102,34 +102,117 @@ class PerhitunganMooraController extends Controller
 
     public function normalisasi()
     {
-        $array_pembilang = [];
-        $array_pembagi = [];
-        $count_alternatif = Alternatif::count('id');
-        $kriterias = Kriteria::orderBy('kode', 'asc')->get();
-        $alternatifs = Alternatif::orderBy('alternatif', 'asc')->get();
-        foreach ($kriterias as $kriteria) {
-            foreach ($alternatifs as $alternatif) {
-                $query = PerhitunganMoora::where('alternatif_uuid', $alternatif->uuid)->where('kriteria_uuid', $kriteria->uuid)->first();
-                $array_pembagi[] = pow($query->bobot, 2);
-                $array_pembilang[] = $query->bobot;
+        //Inisialisasi Normalisasi
+        $data = [
+            'title' => 'Normalisasi',
+            'mooras' => DB::table('perhitungan_mooras as a')
+                ->join('alternatifs as b', 'a.alternatif_uuid', '=', 'b.uuid')
+                ->select('a.*', 'b.alternatif', 'b.keterangan')
+                ->orderBy('b.alternatif', 'asc'),
+            'kriterias' => Kriteria::orderBy('kode', 'asc')->get(),
+            'alternatifs' => Alternatif::orderBy('alternatif', 'asc')->get(),
+            'sum_kriteria' => Kriteria::count('id'),
+        ];
+        $elements = '';
+        $array_bobot = [];
+        foreach ($data['alternatifs'] as $alternatif) {
+            $elements .= "<tr><td>A$alternatif->alternatif</td>
+            <td>$alternatif->keterangan</td>";
+            foreach ($data['kriterias'] as $kriteria) {
+                $bobots = DB::table('perhitungan_mooras')
+                    ->where('kriteria_uuid', $kriteria->uuid)
+                    ->where('alternatif_uuid', $alternatif->uuid)
+                    ->get();
+                foreach ($bobots as $bobot) {
+                    $elements .= "<td class=\"text-center\" id=\"nilai-bobot\">
+                                        <p class=\"p-bobot\">" . $bobot->bobot / 100 . "</p>
+                                        <form action=\"javascript:;\" id=\"form-update-bobot\">
+                                            <input type=\"number\" class=\"d-none input-bobot\" data-uuid=" . $bobot->bobot / 100 . " value=\"" . $bobot->bobot / 100 . "\" style=\"width:6vh\">
+                                        </form>
+                                    </td>";
+                    $array_bobot[] = $bobot->bobot / 100;
+                }
+            }
+            $elements .= "</tr>";
+        }
+        $data['elements'] = $elements;
+        //MENGHITUNG RANKING-----------------------------------------------
+        $bobot_kriteria = array_chunk($array_bobot, $data['sum_kriteria']);
+
+        //Mengambil Bobot Kriteria
+        $bobot = [];
+        foreach ($data['kriterias'] as $kriteria) {
+            $bobot[] = $kriteria->bobot / 100;
+        }
+        //Meng kalikan bobot dengan normalisasi
+        $hasil_kali = [];
+        for ($i = 0; $i < count($bobot_kriteria); $i++) {
+            for ($j = 0; $j < count($bobot); $j++) {
+                $hasil_kali[] = floatval(number_format($bobot_kriteria[$i][$j] * $bobot[$j], 3));
             }
         }
-        $kuadrat = array_chunk($array_pembagi, $count_alternatif);
-        $pembilang = array_chunk($array_pembilang, $count_alternatif);
-        $pembagi = [];
-        foreach ($kuadrat as $row) {
-            $jumlah = array_sum($row);
-            $akarKuadrat = floatval(number_format(sqrt($jumlah), 3));
-            $pembagi[] = $akarKuadrat;
+
+        //hasil perkalian di pecah menjadi array muti dimensi
+        $pecah_hasil = array_chunk($hasil_kali, $data['sum_kriteria']);
+
+        // Perkalian Semua Array
+        $ranking = [];
+        for ($u = 0; $u < count($pecah_hasil); $u++) {
+            $ranking[] = round(array_sum($pecah_hasil[$u]), 3);
         }
-        $hasil = [];
-        foreach ($pembilang as $row => $val) {
-            $hasil[$row] = array_map(function ($value) use ($row, $pembagi) {
-                return floatval(number_format($value / $pembagi[$row], 3));
-            }, $val);
+
+        //Merangking
+        $nama = Alternatif::orderBy('alternatif', 'asc')->get();
+        $rangking_assoc = [];
+        foreach ($ranking as $index => $nilai) {
+            $rangking_assoc[] = [$nama[$index]->keterangan, $nilai];
         }
-        return response()->json(['hasil' => $hasil]);
+
+        $names = array_column($rangking_assoc, 0);
+        $scores = array_column($rangking_assoc, 1);
+
+        // Menggunakan array_multisort untuk mengurutkan scores secara menurun
+        array_multisort($scores, SORT_DESC, $names);
+
+        // Menggabungkan kembali array setelah diurutkan
+        $final_ranking = array_map(function ($name, $score) {
+            return [$name, $score];
+        }, $names, $scores);
+
+        $data['ranking'] = $final_ranking;
+
+        return response()->json(['data' => $data]);
     }
+    // public function normalisasi()
+    // {
+    //     $array_pembilang = [];
+    //     $array_pembagi = [];
+    //     $count_alternatif = Alternatif::count('id');
+    //     $kriterias = Kriteria::orderBy('kode', 'asc')->get();
+    //     $alternatifs = Alternatif::orderBy('alternatif', 'asc')->get();
+    //     foreach ($kriterias as $kriteria) {
+    //         foreach ($alternatifs as $alternatif) {
+    //             $query = PerhitunganMoora::where('alternatif_uuid', $alternatif->uuid)->where('kriteria_uuid', $kriteria->uuid)->first();
+    //             $array_pembagi[] = pow($query->bobot, 2);
+    //             $array_pembilang[] = $query->bobot;
+    //         }
+    //     }
+    //     $kuadrat = array_chunk($array_pembagi, $count_alternatif);
+    //     $pembilang = array_chunk($array_pembilang, $count_alternatif);
+    //     $pembagi = [];
+    //     foreach ($kuadrat as $row) {
+    //         $jumlah = array_sum($row);
+    //         $akarKuadrat = floatval(number_format(sqrt($jumlah), 3));
+    //         $pembagi[] = $akarKuadrat;
+    //     }
+    //     $hasil = [];
+    //     foreach ($pembilang as $row => $val) {
+    //         $hasil[$row] = array_map(function ($value) use ($row, $pembagi) {
+    //             return floatval(number_format($value / $pembagi[$row], 3));
+    //         }, $val);
+    //     }
+    //     return response()->json(['hasil' => $hasil]);
+    // }
 
     public function preferensi(Request $request)
     {

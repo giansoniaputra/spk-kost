@@ -61,85 +61,77 @@ $(document).ready(function () {
     // KEPUTUSAN
     $("#btn-normalisasi").on("click", function () {
         $.ajax({
-            url: "/moora-normalisasi",
+            url: "/saw-normalisasi",
             type: "GET",
             dataType: 'json',
             success: function (response) {
-                // console.log(response.hasil)
-                let transposedMatrix = transpose(response.hasil);
-                // Membuat tabel HTML
+                let data = response.data
+                let rankingElement = document.querySelector('#ranking')
+                console.log(data);
+                let normalisasiElement = document.querySelector('#normalisasi');
+                let keys = Object.keys(data.mooras)
+                let normalisasi = `
+                <div class="row mt-3">
+                    <div class="col-sm-12">
+                        <div class="card">
+                            <div class="card-header">
+                            <h3>Tabel Normalisasi</h3>
+                            </div>
+                            <div class="card-body">
+                                <table id="table-normalisasi" class="table table-bordered table-hover dtr-inline" style="overflow:scroll ">
+                                    <thead>
+                                        <tr>
+                                            <th class="text-center" rowspan="2">Alternatif</th>
+                                            <th class="text-center" rowspan="2">Keterangan</th>
+                                            <th class="text-center" colspan="${data.sum_kriteria}">Kriteria</th>
+                                        </tr>
+                                        <tr>`;
+                data.kriterias.forEach((kriteria) => {
+                    normalisasi += `<th class="tetx-center">C${kriteria.kode}</th>`
+                })
+                normalisasi += `
+                </tr>
+                </thead>
+                <tbody>
+                `;
+                if (keys.length == 0) {
+                    normalisasi += `<tr><td class="text-center" colspan="${2 + data.sum_kriteria}">Belum Ada Perhitungan</td></tr>`
+                } else {
+                    normalisasi += data.elements
+                }
+                normalisasiElement.innerHTML = normalisasi
 
+                // PERANGKINGAN
+                let ranking = `
+                    <div class="row mt-3">
+                        <div class="col-sm-12">
+                            <div class="card">
+                                <div class="card-header">
+                                <h3>Tabel Normalisasi</h3>
+                                </div>
+                                <div class="card-body">
+                                    <table id="table-normalisasi" class="table table-bordered table-hover dtr-inline" style="overflow:scroll ">
+                                        <thead>
+                                            <tr>
+                                                <td>Alternatif</td>
+                                                <td>Keterangan</td>
+                                                <td>Ranking</td>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                    `;
+                data.ranking.forEach((a, b) => {
+                    ranking += `
+                                        <tr>
+                                            <td>${b + 1}</td>
+                                            <td>${a[0]}</td>
+                                            <td>${a[1]}</td>
+                                        </tr>
+                                        `
+                })
 
-                $.ajax({
-                    data: { data: transposedMatrix },
-                    url: "/moora-preferensi",
-                    type: "GET",
-                    dataType: 'json',
-                    success: function (response) {
-                        console.log(response);
-                        // Membuat tabel HTML
-                        let table2 = `<div class="row">
-                                        <div class="col-sm-12">
-                                            <div class="card">
-                                                <div class="card-header">
-                                                <h2>Nilai Preferensi</h2>
-                                                </div>
-                                                <div class="card-body">
-                                                    <table class='table table-bordered table-hover dtr-inline'><tr><th>Alternatif</th>`;
-
-                        // Menambahkan kolom untuk masing-masing transposedMatrix
-                        for (let i = 0; i < response.result[0].length; i++) {
-                            table2 += "<th>C " + (i + 1) + "</th>";
-                        }
-
-                        table2 += "</tr>";
-
-                        // Mengisi tabel dengan data response.result
-                        for (let i = 0; i < response.result[0].length; i++) {
-                            table2 += "<tr><td>A" + (i + 1) + "</td>";
-
-                            for (let j = 0; j < response.result[i].length; j++) {
-                                table2 += "<td>" + response.result[i][j].toFixed(3) + "</td>";
-                            }
-
-                            table2 += "</tr>";
-                        }
-
-                        table2 += "</table></div></div></div></div>";
-                        $("#nilai-preferensi").html(table2)
-
-
-                        // let table3 = `<div class="row">
-                        //                 <div class="col-sm-12">
-                        //                     <div class="card">
-                        //                         <div class="card-header">
-                        //                             <h2>Hasil Ranking</h2>
-                        //                         </div>
-                        //                     <div class="card-body">
-                        //                         <table class='table table-bordered table-hover dtr-inline'>
-                        //                             <tr>
-                        //                                 <th>Alternatif</th>
-                        //                                 <th>Nilai</th>
-                        //                                 <th>Peringkat</th>
-                        //                             </tr>
-                        //                             <tbody>
-                        //                             `
-                        // response.hasil.map((a, b) => {
-                        //     table3 += `<tr>
-                        //                     <td>${a[0]}</td>
-                        //                     <td>${a[1].toFixed(3)}</td>
-                        //                     <td>${(b + 1)}</td>
-                        //                 </tr>
-                        //                 `
-                        // });
-                        // table3 += "</tbody></table></div></div></div></div></div></div>";
-
-                        // $("#rangking").html(table3);
-
-
-                    }
-                });
-
+                ranking += `</tbody></table>`
+                rankingElement.innerHTML = ranking
             }
         });
     })

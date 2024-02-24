@@ -56,16 +56,9 @@
                     </tbody>
                     <tfoot>
                         <tr>
-                            <th colspan="2" class="text-center">Optimum</th>
+                            <th colspan="2" class="text-center">Nilai Bobot(Wj)</th>
                             @foreach ($kriterias as $kriteria)
-                            @php
-                            if($kriteria->atribut == 'COST'){
-                            $atribut = "Min";
-                            } else {
-                            $atribut = "Max";
-                            }
-                            @endphp
-                            <th>{{ $atribut }}</th>
+                            <th>{{ $kriteria->bobot }}%</th>
                             @endforeach
                         </tr>
                     </tfoot>

@@ -16,7 +16,7 @@ return new class extends Migration
             $table->uuid('uuid')->unique();
             $table->string('kriteria_uuid');
             $table->string('sub_kriteria');
-            $table->string('bobot');
+            $table->integer('bobot');
             $table->timestamps();
         });
     }

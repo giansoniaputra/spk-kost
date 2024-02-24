@@ -2,7 +2,7 @@
 @section('container')
 <div class="row mb-2">
     <div class="col">
-        <button type="button" class="btn btn-primary" id="btn-add-perhitungan">Tambah Perhitungan Moora</button>
+        <button type="button" class="btn btn-primary" id="btn-add-perhitungan">Tambah Perhitungan WASPAS</button>
     </div>
 </div>
 <div class="row">
@@ -25,7 +25,7 @@
                         </tr>
                     </thead>
                     <tbody>
-                        @if($mooras->count('a.id') == 0)
+                        @if($perhitungan->count('a.id') == 0)
                         <tr>
                             <td class="text-center" colspan="{{ 2 + $sum_kriteria }}">Belum Ada Perhitungan</td>
                         </tr>
@@ -36,7 +36,7 @@
                             <td>{{ $alternatif->keterangan }}</td>
                             @foreach($kriterias as $kriteria)
                             @php
-                            $bobots = DB::table('perhitungan_mooras')
+                            $bobots = DB::table('perhitungans')
                             ->where('kriteria_uuid', $kriteria->uuid)
                             ->where('alternatif_uuid', $alternatif->uuid)
                             ->get();
@@ -65,15 +65,14 @@
                 </table>
             </div>
             <div class="card-footer">
-                @if($mooras->count('a.id') > 0)
-                <button class="btn btn-primary float-right" id="btn-normalisasi">Cari Keputusan</button>
+                @if($perhitungan->count('a.id') > 0)
+                <button class="btn btn-primary float-right" id="btn-waspas">Cari Keputusan</button>
                 @endif
             </div>
         </div>
     </div>
 </div>
-<div id="matrix-normalisasi"></div>
-<div id="nilai-preferensi"></div>
-<div id="rangking"></div>
-<script src="/ex-script/moora.js"></script>
+<div id="normalisasi"></div>
+<div id="ranking"></div>
+<script src="/ex-script/saw.js"></script>
 @endsection

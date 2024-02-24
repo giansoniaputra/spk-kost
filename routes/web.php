@@ -65,3 +65,5 @@ Route::get('/perhitungan-update/{perhitungan:uuid}', [PerhitunganController::cla
 Route::get('/saw-normalisasi', [PerhitunganController::class, 'normalisasi'])->middleware('auth');
 Route::get('/saw-preferensi', [PerhitunganController::class, 'preferensi'])->middleware('auth');
 Route::get('/saw', [PerhitunganController::class, 'index_saw'])->middleware('auth');
+Route::get('/waspas', [PerhitunganController::class, 'index_waspas'])->middleware('auth');
+Route::get('/waspas-normalisasi', [PerhitunganController::class, 'normalisasi_waspas'])->middleware('auth');

@@ -67,7 +67,6 @@ $(document).ready(function () {
             success: function (response) {
                 let data = response.data
                 let rankingElement = document.querySelector('#ranking')
-                console.log(data);
                 let normalisasiElement = document.querySelector('#normalisasi');
                 let keys = Object.keys(data.perhitungan)
                 let normalisasi = `
@@ -128,6 +127,83 @@ $(document).ready(function () {
                                             <td>${a[1]}</td>
                                         </tr>
                                         `
+                })
+
+                ranking += `</tbody></table>`
+                rankingElement.innerHTML = ranking
+            }
+        });
+    })
+    // WASPAS
+    $("#btn-waspas").on("click", function () {
+        $.ajax({
+            url: "/waspas-normalisasi",
+            type: "GET",
+            dataType: 'json',
+            success: function (response) {
+                let data = response.data
+                console.log(data);
+                let rankingElement = document.querySelector('#ranking')
+                let normalisasiElement = document.querySelector('#normalisasi');
+                let keys = Object.keys(data.perhitungan)
+                let normalisasi = `
+                    <div class="row mt-3">
+                        <div class="col-sm-12">
+                            <div class="card">
+                                <div class="card-header">
+                                <h3>Tabel Normalisasi</h3>
+                                </div>
+                                <div class="card-body">
+                                    <table id="table-normalisasi" class="table table-bordered table-hover dtr-inline" style="overflow:scroll ">
+                                        <thead>
+                                            <tr>
+                                                <th class="text-center" rowspan="2">Alternatif</th>
+                                                <th class="text-center" rowspan="2">Keterangan</th>
+                                                <th class="text-center" colspan="${data.sum_kriteria}">Kriteria</th>
+                                            </tr>
+                                            <tr>`;
+                data.kriterias.forEach((kriteria) => {
+                    normalisasi += `<th class="tetx-center">C${kriteria.kode}</th>`
+                })
+                normalisasi += `
+                    </tr>
+                    </thead>
+                    <tbody>
+                    `;
+                if (keys.length == 0) {
+                    normalisasi += `<tr><td class="text-center" colspan="${2 + data.sum_kriteria}">Belum Ada Perhitungan</td></tr>`
+                } else {
+                    normalisasi += data.elements
+                }
+                normalisasiElement.innerHTML = normalisasi
+
+                // PERANGKINGAN
+                let ranking = `
+                        <div class="row mt-3">
+                            <div class="col-sm-12">
+                                <div class="card">
+                                    <div class="card-header">
+                                    <h3>Tabel Perankingan</h3>
+                                    </div>
+                                    <div class="card-body">
+                                        <table id="table-perankingan" class="table table-bordered table-hover dtr-inline" style="overflow:scroll ">
+                                            <thead>
+                                                <tr>
+                                                    <td>Alternatif</td>
+                                                    <td>Keterangan</td>
+                                                    <td>Ranking</td>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                        `;
+                data.ranking.forEach((a, b) => {
+                    ranking += `
+                                            <tr>
+                                                <td>${b + 1}</td>
+                                                <td>${a[0]}</td>
+                                                <td>${a[1]}</td>
+                                            </tr>
+                                            `
                 })
 
                 ranking += `</tbody></table>`

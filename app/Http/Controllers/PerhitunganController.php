@@ -4,9 +4,10 @@ namespace App\Http\Controllers;
 
 use App\Models\Kriteria;
 use App\Models\Alternatif;
+use App\Models\Perhitungan;
+use App\Models\SubKriteria;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
-use App\Models\Perhitungan;
 use Illuminate\Support\Facades\DB;
 
 class PerhitunganController extends Controller
@@ -39,6 +40,20 @@ class PerhitunganController extends Controller
             'sum_kriteria' => Kriteria::count('id'),
         ];
         return view('saw.index', $data);
+    }
+    public function index_waspas()
+    {
+        $data = [
+            'title' => 'Perhitungan WASPAS',
+            'perhitungan' => DB::table('perhitungans as a')
+                ->join('alternatifs as b', 'a.alternatif_uuid', '=', 'b.uuid')
+                ->select('a.*', 'b.alternatif', 'b.keterangan')
+                ->orderBy('b.alternatif', 'asc'),
+            'kriterias' => Kriteria::orderBy('kode', 'asc')->get(),
+            'alternatifs' => Alternatif::orderBy('alternatif', 'asc')->get(),
+            'sum_kriteria' => Kriteria::count('id'),
+        ];
+        return view('waspas.index', $data);
     }
 
     public function create()
@@ -124,13 +139,15 @@ class PerhitunganController extends Controller
                     ->where('alternatif_uuid', $alternatif->uuid)
                     ->get();
                 foreach ($bobots as $bobot) {
+                    $max = SubKriteria::where('kriteria_uuid', $kriteria->uuid)->orderBy('bobot', 'desc')->first();
+                    $bobot_kriteria = round($bobot->bobot / $max->bobot, 3);
                     $elements .= "<td class=\"text-center\" id=\"nilai-bobot\">
-                                        <p class=\"p-bobot\">" . $bobot->bobot / 100 . "</p>
+                                        <p class=\"p-bobot\">" . $bobot_kriteria . "</p>
                                         <form action=\"javascript:;\" id=\"form-update-bobot\">
-                                            <input type=\"number\" class=\"d-none input-bobot\" data-uuid=" . $bobot->bobot / 100 . " value=\"" . $bobot->bobot / 100 . "\" style=\"width:6vh\">
+                                            <input type=\"number\" class=\"d-none input-bobot\" data-uuid=" . $bobot_kriteria . " value=\"" . $bobot_kriteria . "\" style=\"width:6vh\">
                                         </form>
                                     </td>";
-                    $array_bobot[] = $bobot->bobot / 100;
+                    $array_bobot[] = $bobot_kriteria;
                 }
             }
             $elements .= "</tr>";
@@ -183,101 +200,96 @@ class PerhitunganController extends Controller
 
         return response()->json(['data' => $data]);
     }
-    // public function normalisasi()
-    // {
-    //     $array_pembilang = [];
-    //     $array_pembagi = [];
-    //     $count_alternatif = Alternatif::count('id');
-    //     $kriterias = Kriteria::orderBy('kode', 'asc')->get();
-    //     $alternatifs = Alternatif::orderBy('alternatif', 'asc')->get();
-    //     foreach ($kriterias as $kriteria) {
-    //         foreach ($alternatifs as $alternatif) {
-    //             $query = Perhitungan::where('alternatif_uuid', $alternatif->uuid)->where('kriteria_uuid', $kriteria->uuid)->first();
-    //             $array_pembagi[] = pow($query->bobot, 2);
-    //             $array_pembilang[] = $query->bobot;
-    //         }
-    //     }
-    //     $kuadrat = array_chunk($array_pembagi, $count_alternatif);
-    //     $pembilang = array_chunk($array_pembilang, $count_alternatif);
-    //     $pembagi = [];
-    //     foreach ($kuadrat as $row) {
-    //         $jumlah = array_sum($row);
-    //         $akarKuadrat = floatval(number_format(sqrt($jumlah), 3));
-    //         $pembagi[] = $akarKuadrat;
-    //     }
-    //     $hasil = [];
-    //     foreach ($pembilang as $row => $val) {
-    //         $hasil[$row] = array_map(function ($value) use ($row, $pembagi) {
-    //             return floatval(number_format($value / $pembagi[$row], 3));
-    //         }, $val);
-    //     }
-    //     return response()->json(['hasil' => $hasil]);
-    // }
-
-    public function preferensi(Request $request)
+    public function normalisasi_waspas()
     {
-        $data = $request->data;
-        $kriterias = Kriteria::orderBy('kode', 'asc');
-
-        $bobot = [];
-        foreach ($kriterias->get() as $kriteria) {
-            $bobot[] = kriteria::bobot($kriteria->bobot);
-        }
-        $result_array = [];
-        for ($i = 0; $i < count($data); $i++) {
-            for ($j = 0; $j < count($bobot); $j++) {
-                $result_array[] = floatval(number_format($data[$i][$j] * $bobot[$j], 3));
-            }
-        }
-        $final_result = array_chunk($result_array, $kriterias->count('id'));
-        $rangking = [];
-        $atribut = [];
-        foreach ($kriterias->get() as $row) {
-            $atribut[] = $row->atribut;
-        }
-        //     COST   0     BENEFIT 1    COST 2      BENEFIT 3    BENEFIT 4   BENEFIT 5   BENEFIT 6  BENEFIT  7
-        // -----------------------------------------------------------------------------------------------------
-        // 0 | 0.098058068	0.04472136	0.08479983	0.060633906	0.05547002	0.043759497	0.050709255	0.036514837
-        // 1 | 0.098058068	0.04472136	0.08479983	0.036380344	0.041602515	0.058345997	0.050709255	0.036514837
-        // 2 | 0.098058068	0.04472136	0.08479983	0.036380344	0.041602515	0.043759497	0.03380617	0.054772256
-        // 3 | 0.039223227	0.04472136	0.105999788	0.048507125	0.041602515	0.043759497	0.03380617	0.036514837
-        // 4 | 0.098058068	0.04472136	0.08479983	0.036380344	0.041602515	0.029172998	0.050709255	0.054772256
-        $result = [];
-
-        // Loop melalui setiap array (SIPA)
-        for ($k = 0; $k < count($final_result); $k++) {
-            for ($l = 0; $l < count($bobot); $l++) {
-                $jumlah = 0;
-                if ($atribut[$l] == 'BENEFIT') {
-                    $jumlah += $final_result[$k][$l];
-                } else {
-                    $jumlah -= $final_result[$k][$l];
+        //Inisialisasi Normalisasi
+        $data = [
+            'title' => 'Normalisasi',
+            'perhitungan' => DB::table('perhitungans as a')
+                ->join('alternatifs as b', 'a.alternatif_uuid', '=', 'b.uuid')
+                ->select('a.*', 'b.alternatif', 'b.keterangan')
+                ->orderBy('b.alternatif', 'asc'),
+            'kriterias' => Kriteria::orderBy('kode', 'asc')->get(),
+            'alternatifs' => Alternatif::orderBy('alternatif', 'asc')->get(),
+            'sum_kriteria' => Kriteria::count('id'),
+        ];
+        $elements = '';
+        $array_bobot = [];
+        foreach ($data['alternatifs'] as $alternatif) {
+            $elements .= "<tr><td>A$alternatif->alternatif</td>
+            <td>$alternatif->keterangan</td>";
+            foreach ($data['kriterias'] as $kriteria) {
+                $bobots = DB::table('perhitungans')
+                    ->where('kriteria_uuid', $kriteria->uuid)
+                    ->where('alternatif_uuid', $alternatif->uuid)
+                    ->get();
+                foreach ($bobots as $bobot) {
+                    if ($kriteria->atribut == 'BENEFIT') {
+                        $max = SubKriteria::where('kriteria_uuid', $kriteria->uuid)->orderBy('bobot', 'desc')->first();
+                        $bobot_kriteria = round($bobot->bobot / $max->bobot, 3);
+                    } else {
+                        $min = SubKriteria::where('kriteria_uuid', $kriteria->uuid)->orderBy('bobot', 'asc')->first();
+                        $bobot_kriteria = round($min->bobot / $bobot->bobot, 3);
+                    }
+                    $elements .= "<td class=\"text-center\" id=\"nilai-bobot\">
+                                        <p class=\"p-bobot\">" . $bobot_kriteria . "</p>
+                                        <form action=\"javascript:;\" id=\"form-update-bobot\">
+                                            <input type=\"number\" class=\"d-none input-bobot\" data-uuid=" . $bobot_kriteria . " value=\"" . $bobot_kriteria . "\" style=\"width:6vh\">
+                                        </form>
+                                    </td>";
+                    $array_bobot[] = $bobot_kriteria;
                 }
-                $rangking[] = $jumlah;
+            }
+            $elements .= "</tr>";
+        }
+        $data['elements'] = $elements;
+        //MENGHITUNG RANKING-----------------------------------------------
+        $bobot_kriteria = array_chunk($array_bobot, $data['sum_kriteria']);
+
+        //Mengambil Bobot Kriteria
+        $bobot = [];
+        foreach ($data['kriterias'] as $kriteria) {
+            $bobot[] = $kriteria->bobot / 100;
+        }
+        //Meng kalikan bobot dengan normalisasi
+        $hasil_kali = [];
+        $hasil_pangkat = [];
+        for ($i = 0; $i < count($bobot_kriteria); $i++) {
+            for ($j = 0; $j < count($bobot); $j++) {
+                $hasil_kali[] = floatval(number_format($bobot_kriteria[$i][$j] * $bobot[$j], 3));
+                $hasil_pangkat[] = floatval(number_format(pow($bobot_kriteria[$i][$j], $bobot[$j]), 3));
             }
         }
-        // // Loop melalui setiap array (RIZAL)
-        // for ($k = 0; $k < count($final_result); $k++) {
-        //     for ($l = 0; $l < count($bobot); $l++) {
-        //         $jumlah = 0;
-        //         if ($atribut[$l] == 'BENEFIT') {
-        //             $jumlah += $final_result[$k][$l];
-        //         } else {
-        //             $jumlah += $final_result[$k][$l];
-        //         }
-        //         $rangking[] = $jumlah;
-        //     }
-        // }
 
-        $rangking_result = array_chunk($rangking, $kriterias->count('id'));
-        $final_ranking = [];
-        for ($u = 0; $u < count($rangking_result); $u++) {
-            $final_ranking[] = array_sum($rangking_result[$u]);
+
+
+
+        //hasil perkalian di pecah menjadi array muti dimensi
+        $pecah_kali = array_chunk($hasil_kali, $data['sum_kriteria']);
+        $pecah_pangkat = array_chunk($hasil_pangkat, $data['sum_kriteria']);
+
+
+        // Perkalian Semua Array
+        $sigma1 = [];
+        for ($u = 0; $u < count($pecah_kali); $u++) {
+            $sigma1[] = round(0.5 * round(array_sum($pecah_kali[$u]), 3), 3);
+        }
+        $sigma2 = [];
+        for ($u = 0; $u < count($pecah_pangkat); $u++) {
+            $sigma2[] = round(0.5 * round(array_reduce($pecah_pangkat[$u], function ($carry, $item) {
+                return $carry * $item;
+            }, 1), 3), 3);
         }
 
+        $ranking = array_map(function ($x, $y) {
+            return round($x + $y, 3);
+        }, $sigma1, $sigma2);
+
+
+        //Merangking
         $nama = Alternatif::orderBy('alternatif', 'asc')->get();
         $rangking_assoc = [];
-        foreach ($final_ranking as $index => $nilai) {
+        foreach ($ranking as $index => $nilai) {
             $rangking_assoc[] = [$nama[$index]->keterangan, $nilai];
         }
 
@@ -288,14 +300,12 @@ class PerhitunganController extends Controller
         array_multisort($scores, SORT_DESC, $names);
 
         // Menggabungkan kembali array setelah diurutkan
-        $result2 = array_map(function ($name, $score) {
+        $final_ranking = array_map(function ($name, $score) {
             return [$name, $score];
         }, $names, $scores);
 
+        $data['ranking'] = $final_ranking;
 
-        return response()->json([
-            'result' => $final_result,
-            'hasil' => $result2
-        ]);
+        return response()->json(['data' => $data]);
     }
 }

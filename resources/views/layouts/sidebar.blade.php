@@ -50,8 +50,9 @@
         </a>
         <div id="collapseUtilities" class="collapse" aria-labelledby="headingUtilities" data-parent="#accordionSidebar">
             <div class="bg-white py-2 collapse-inner rounded">
-                <h6 class="collapse-header">SAW & WASPAT:</h6>
+                <h6 class="collapse-header">SAW & WASPAS:</h6>
                 <a class="collapse-item" href="/saw">SAW</a>
+                <a class="collapse-item" href="/waspas">WASPAS</a>
             </div>
         </div>
     </li>

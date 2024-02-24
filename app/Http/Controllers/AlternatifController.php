@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Alternatif;
+use App\Models\Perhitungan;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use App\Models\PerhitunganMoora;
@@ -84,7 +85,7 @@ class AlternatifController extends Controller
     public function destroy(Alternatif $alternatif)
     {
         Alternatif::destroy($alternatif->id);
-        PerhitunganMoora::where('alternatif_uuid', $alternatif->uuid)->delete();
+        Perhitungan::where('alternatif_uuid', $alternatif->uuid)->delete();
         return response()->json(['success' => 'Alternatif Berhasil Di Hapus!']);
     }
 

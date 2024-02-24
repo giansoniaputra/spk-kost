@@ -12,7 +12,7 @@ $(document).ready(function () {
             if (result.isConfirmed) {
                 $("#spinner").html(loader)
                 $.ajax({
-                    url: "/moora-create",
+                    url: "/perhitungan-create",
                     type: "GET",
                     dataType: "json",
                     success: function (response) {
@@ -48,7 +48,7 @@ $(document).ready(function () {
         let uuid = thiss.data("uuid")
         $.ajax({
             data: { bobot: thiss.val() },
-            url: "/moora-update/" + uuid,
+            url: "/perhitungan-update/" + uuid,
             type: "get",
             dataType: 'json',
             success: function (response) {
@@ -69,7 +69,7 @@ $(document).ready(function () {
                 let rankingElement = document.querySelector('#ranking')
                 console.log(data);
                 let normalisasiElement = document.querySelector('#normalisasi');
-                let keys = Object.keys(data.mooras)
+                let keys = Object.keys(data.perhitungan)
                 let normalisasi = `
                 <div class="row mt-3">
                     <div class="col-sm-12">
@@ -107,10 +107,10 @@ $(document).ready(function () {
                         <div class="col-sm-12">
                             <div class="card">
                                 <div class="card-header">
-                                <h3>Tabel Normalisasi</h3>
+                                <h3>Tabel Perankingan</h3>
                                 </div>
                                 <div class="card-body">
-                                    <table id="table-normalisasi" class="table table-bordered table-hover dtr-inline" style="overflow:scroll ">
+                                    <table id="table-perankingan" class="table table-bordered table-hover dtr-inline" style="overflow:scroll ">
                                         <thead>
                                             <tr>
                                                 <td>Alternatif</td>

@@ -25,7 +25,7 @@
                         </tr>
                     </thead>
                     <tbody>
-                        @if($mooras->count('a.id') == 0)
+                        @if($perhitungan->count('a.id') == 0)
                         <tr>
                             <td class="text-center" colspan="{{ 2 + $sum_kriteria }}">Belum Ada Perhitungan</td>
                         </tr>
@@ -36,7 +36,7 @@
                             <td>{{ $alternatif->keterangan }}</td>
                             @foreach($kriterias as $kriteria)
                             @php
-                            $bobots = DB::table('perhitungan_mooras')
+                            $bobots = DB::table('perhitungans')
                             ->where('kriteria_uuid', $kriteria->uuid)
                             ->where('alternatif_uuid', $alternatif->uuid)
                             ->get();
@@ -65,7 +65,7 @@
                 </table>
             </div>
             <div class="card-footer">
-                @if($mooras->count('a.id') > 0)
+                @if($perhitungan->count('a.id') > 0)
                 <button class="btn btn-primary float-right" id="btn-normalisasi">Cari Keputusan</button>
                 @endif
             </div>

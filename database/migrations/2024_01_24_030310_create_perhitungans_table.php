@@ -11,7 +11,7 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('perhitungan_mooras', function (Blueprint $table) {
+        Schema::create('perhitungans', function (Blueprint $table) {
             $table->id();
             $table->uuid('uuid')->unique();
             $table->string('alternatif_uuid');
@@ -26,6 +26,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('perhitungan_mooras');
+        Schema::dropIfExists('perhitungans');
     }
 };

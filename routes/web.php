@@ -2,13 +2,12 @@
 
 use App\Models\Kriteria;
 use App\Models\Alternatif;
-use App\Models\PerhitunganMoora;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\KriteriaController;
 use App\Http\Controllers\AlternatifController;
+use App\Http\Controllers\PerhitunganController;
 use App\Http\Controllers\SubKriteriaController;
-use App\Http\Controllers\PerhitunganMooraController;
 
 /*
 |--------------------------------------------------------------------------
@@ -60,9 +59,9 @@ Route::get('/alternatif-edit/{alternatif:uuid}', [AlternatifController::class, '
 Route::post('/alternatif-update/{alternatif:uuid}', [AlternatifController::class, 'update'])->middleware('auth');
 Route::post('/alternatif-destroy/{alternatif:uuid}', [AlternatifController::class, 'destroy'])->middleware('auth');
 // Perhitunga Moor->middleware('auth')a
-Route::get('/moora', [PerhitunganMooraController::class, 'index'])->middleware('auth');
-Route::get('/moora-create', [PerhitunganMooraController::class, 'create'])->middleware('auth');
-Route::get('/moora-update/{moora:uuid}', [PerhitunganMooraController::class, 'update'])->middleware('auth');
-Route::get('/saw-normalisasi', [PerhitunganMooraController::class, 'normalisasi'])->middleware('auth');
-Route::get('/moora-preferensi', [PerhitunganMooraController::class, 'preferensi'])->middleware('auth');
-Route::get('/saw', [PerhitunganMooraController::class, 'index_saw'])->middleware('auth');
+Route::get('/perhitungan', [PerhitunganController::class, 'index'])->middleware('auth');
+Route::get('/perhitungan-create', [PerhitunganController::class, 'create'])->middleware('auth');
+Route::get('/perhitungan-update/{perhitungan:uuid}', [PerhitunganController::class, 'update'])->middleware('auth');
+Route::get('/saw-normalisasi', [PerhitunganController::class, 'normalisasi'])->middleware('auth');
+Route::get('/saw-preferensi', [PerhitunganController::class, 'preferensi'])->middleware('auth');
+Route::get('/saw', [PerhitunganController::class, 'index_saw'])->middleware('auth');

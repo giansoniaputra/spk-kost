@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Kriteria;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
-use App\Models\PerhitunganMoora;
+use App\Models\Perhitungan;
 use Yajra\DataTables\Facades\DataTables;
 use Illuminate\Support\Facades\Validator;
 
@@ -127,7 +127,7 @@ class KriteriaController extends Controller
     public function destroy(Kriteria $kriteria, Request $request)
     {
         Kriteria::where('uuid', $request->uuid)->delete();
-        PerhitunganMoora::where('kriteria_uuid', $request->uuid)->delete();
+        Perhitungan::where('kriteria_uuid', $request->uuid)->delete();
         return response()->json(['success' => 'Data Kriteria Berhasil Dihapus']);
     }
 

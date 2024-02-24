@@ -6,16 +6,16 @@ use App\Models\Kriteria;
 use App\Models\Alternatif;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
-use App\Models\PerhitunganMoora;
+use App\Models\Perhitungan;
 use Illuminate\Support\Facades\DB;
 
-class PerhitunganMooraController extends Controller
+class PerhitunganController extends Controller
 {
     public function index()
     {
         $data = [
             'title' => 'Perhitungan Moora',
-            'mooras' => DB::table('perhitungan_mooras as a')
+            'perhitungan' => DB::table('perhitungans as a')
                 ->join('alternatifs as b', 'a.alternatif_uuid', '=', 'b.uuid')
                 ->select('a.*', 'b.alternatif', 'b.keterangan')
                 ->orderBy('b.alternatif', 'asc'),
@@ -30,7 +30,7 @@ class PerhitunganMooraController extends Controller
     {
         $data = [
             'title' => 'Perhitungan SAW',
-            'mooras' => DB::table('perhitungan_mooras as a')
+            'perhitungan' => DB::table('perhitungans as a')
                 ->join('alternatifs as b', 'a.alternatif_uuid', '=', 'b.uuid')
                 ->select('a.*', 'b.alternatif', 'b.keterangan')
                 ->orderBy('b.alternatif', 'asc'),
@@ -43,7 +43,7 @@ class PerhitunganMooraController extends Controller
 
     public function create()
     {
-        $cek = PerhitunganMoora::first();
+        $cek = Perhitungan::first();
         if (!$cek) {
             $kriterias = Kriteria::orderBy('kode', 'asc')->get();
             $alternatifs = Alternatif::orderBy('alternatif', 'asc')->get();
@@ -55,7 +55,7 @@ class PerhitunganMooraController extends Controller
                         'kriteria_uuid' => $kriteria->uuid,
                         'bobot' => 0
                     ];
-                    PerhitunganMoora::create($data);
+                    Perhitungan::create($data);
                 }
             }
             return response()->json(['success' => 'Perhitungan Baru Berhasil Ditambahkan! Silahkan Masukan Nilainya']);
@@ -63,7 +63,7 @@ class PerhitunganMooraController extends Controller
             $kriterias = Kriteria::orderBy('kode', 'asc')->get();
             $alternatifs = Alternatif::orderBy('alternatif', 'asc')->get();
             foreach ($alternatifs as $alternatif) {
-                $query = PerhitunganMoora::where('alternatif_uuid', $alternatif->uuid)->first();
+                $query = Perhitungan::where('alternatif_uuid', $alternatif->uuid)->first();
                 if (!$query) {
                     foreach ($kriterias as $kriteria) {
                         $data = [
@@ -72,12 +72,12 @@ class PerhitunganMooraController extends Controller
                             'kriteria_uuid' => $kriteria->uuid,
                             'bobot' => 0
                         ];
-                        PerhitunganMoora::create($data);
+                        Perhitungan::create($data);
                     }
                 }
             }
             foreach ($kriterias as $kriteria) {
-                $query = PerhitunganMoora::where('kriteria_uuid', $kriteria->uuid)->first();
+                $query = Perhitungan::where('kriteria_uuid', $kriteria->uuid)->first();
                 if (!$query) {
                     foreach ($alternatifs as $alternatif) {
                         $data = [
@@ -86,7 +86,7 @@ class PerhitunganMooraController extends Controller
                             'kriteria_uuid' => $kriteria->uuid,
                             'bobot' => 0
                         ];
-                        PerhitunganMoora::create($data);
+                        Perhitungan::create($data);
                     }
                 }
             }
@@ -94,9 +94,9 @@ class PerhitunganMooraController extends Controller
         }
     }
 
-    public function update(PerhitunganMoora $moora, Request $request)
+    public function update(Perhitungan $perhitungan, Request $request)
     {
-        PerhitunganMoora::where('uuid', $moora->uuid)->update(['bobot' => $request->bobot]);
+        Perhitungan::where('uuid', $perhitungan->uuid)->update(['bobot' => $request->bobot]);
         return response()->json(['success' => $request->bobot]);
     }
 
@@ -105,7 +105,7 @@ class PerhitunganMooraController extends Controller
         //Inisialisasi Normalisasi
         $data = [
             'title' => 'Normalisasi',
-            'mooras' => DB::table('perhitungan_mooras as a')
+            'perhitungan' => DB::table('perhitungans as a')
                 ->join('alternatifs as b', 'a.alternatif_uuid', '=', 'b.uuid')
                 ->select('a.*', 'b.alternatif', 'b.keterangan')
                 ->orderBy('b.alternatif', 'asc'),
@@ -119,7 +119,7 @@ class PerhitunganMooraController extends Controller
             $elements .= "<tr><td>A$alternatif->alternatif</td>
             <td>$alternatif->keterangan</td>";
             foreach ($data['kriterias'] as $kriteria) {
-                $bobots = DB::table('perhitungan_mooras')
+                $bobots = DB::table('perhitungans')
                     ->where('kriteria_uuid', $kriteria->uuid)
                     ->where('alternatif_uuid', $alternatif->uuid)
                     ->get();
@@ -192,7 +192,7 @@ class PerhitunganMooraController extends Controller
     //     $alternatifs = Alternatif::orderBy('alternatif', 'asc')->get();
     //     foreach ($kriterias as $kriteria) {
     //         foreach ($alternatifs as $alternatif) {
-    //             $query = PerhitunganMoora::where('alternatif_uuid', $alternatif->uuid)->where('kriteria_uuid', $kriteria->uuid)->first();
+    //             $query = Perhitungan::where('alternatif_uuid', $alternatif->uuid)->where('kriteria_uuid', $kriteria->uuid)->first();
     //             $array_pembagi[] = pow($query->bobot, 2);
     //             $array_pembilang[] = $query->bobot;
     //         }

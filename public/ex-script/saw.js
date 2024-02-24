@@ -114,6 +114,7 @@ $(document).ready(function () {
                                             <tr>
                                                 <td>Alternatif</td>
                                                 <td>Keterangan</td>
+                                                <td>Bobot</td>
                                                 <td>Ranking</td>
                                             </tr>
                                         </thead>
@@ -122,9 +123,10 @@ $(document).ready(function () {
                 data.ranking.forEach((a, b) => {
                     ranking += `
                                         <tr>
-                                            <td>${b + 1}</td>
+                                            <td>A${b + 1}</td>
                                             <td>${a[0]}</td>
                                             <td>${a[1]}</td>
+                                            <td>${b + 1}</td>
                                         </tr>
                                         `
                 })
@@ -191,6 +193,7 @@ $(document).ready(function () {
                                                 <tr>
                                                     <td>Alternatif</td>
                                                     <td>Keterangan</td>
+                                                    <td>Botot</td>
                                                     <td>Ranking</td>
                                                 </tr>
                                             </thead>
@@ -199,9 +202,10 @@ $(document).ready(function () {
                 data.ranking.forEach((a, b) => {
                     ranking += `
                                             <tr>
-                                                <td>${b + 1}</td>
+                                                <td>A${b + 1}</td>
                                                 <td>${a[0]}</td>
                                                 <td>${a[1]}</td>
+                                                <td>${b + 1}</td>
                                             </tr>
                                             `
                 })

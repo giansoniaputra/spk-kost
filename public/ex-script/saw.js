@@ -60,6 +60,7 @@ $(document).ready(function () {
 
     // KEPUTUSAN
     $("#btn-normalisasi").on("click", function () {
+        $("#spinner").html(loader)
         $.ajax({
             url: "/saw-normalisasi",
             type: "GET",
@@ -133,11 +134,13 @@ $(document).ready(function () {
 
                 ranking += `</tbody></table>`
                 rankingElement.innerHTML = ranking
+                $("#spinner").html("")
             }
         });
     })
     // WASPAS
     $("#btn-waspas").on("click", function () {
+        $("#spinner").html(loader)
         $.ajax({
             url: "/waspas-normalisasi",
             type: "GET",
@@ -212,6 +215,7 @@ $(document).ready(function () {
 
                 ranking += `</tbody></table>`
                 rankingElement.innerHTML = ranking
+                $("#spinner").html("")
             }
         });
     })

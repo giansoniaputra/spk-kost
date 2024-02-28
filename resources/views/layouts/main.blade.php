@@ -150,6 +150,7 @@
                 <!-- End of Topbar -->
 
                 <!-- Begin Page Content -->
+                <div id="spinner"></div>
                 <div class="container-fluid">
                     <h2 class="mb-2">{{ $title }}</h2>
                     @yield('container')

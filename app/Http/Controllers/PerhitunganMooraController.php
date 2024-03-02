@@ -102,38 +102,20 @@ class PerhitunganMooraController extends Controller
 
     public function normalisasi()
     {
-        $array_pembilang = [];
-        $array_pembagi = [];
-        $count_alternatif = Alternatif::count('id');
-        $kriterias = Kriteria::orderBy('kode', 'asc')->get();
-        $alternatifs = Alternatif::orderBy('alternatif', 'asc')->get();
-        foreach ($kriterias as $kriteria) {
-            foreach ($alternatifs as $alternatif) {
-                $query = PerhitunganMoora::where('alternatif_uuid', $alternatif->uuid)->where('kriteria_uuid', $kriteria->uuid)->first();
-                $array_pembagi[] = pow($query->bobot, 2);
-                $array_pembilang[] = $query->bobot;
-            }
-        }
-        $kuadrat = array_chunk($array_pembagi, $count_alternatif);
-        $pembilang = array_chunk($array_pembilang, $count_alternatif);
-        $pembagi = [];
-        foreach ($kuadrat as $row) {
-            $jumlah = array_sum($row);
-            $akarKuadrat = floatval(number_format(sqrt($jumlah), 3));
-            $pembagi[] = $akarKuadrat;
-        }
-        $hasil = [];
-        foreach ($pembilang as $row => $val) {
-            $hasil[$row] = array_map(function ($value) use ($row, $pembagi) {
-                return floatval(number_format($value / $pembagi[$row], 3));
-            }, $val);
-        }
-        return response()->json(['hasil' => $hasil]);
+        return response()->json(['hasil' => $this->_normalisasi()]);
     }
 
     public function preferensi(Request $request)
     {
-        $data = $request->data;
+        $hasil = $this->_preferensi($request->data);
+        return response()->json([
+            'result' => $hasil['result'],
+            'hasil' => $hasil['hasil']
+        ]);
+    }
+
+    public function _preferensi($data)
+    {
         $kriterias = Kriteria::orderBy('kode', 'asc');
 
         $bobot = [];
@@ -210,9 +192,39 @@ class PerhitunganMooraController extends Controller
         }, $names, $scores);
 
 
-        return response()->json([
+        return [
             'result' => $final_result,
             'hasil' => $result2
-        ]);
+        ];
+    }
+    public function _normalisasi()
+    {
+        $array_pembilang = [];
+        $array_pembagi = [];
+        $count_alternatif = Alternatif::count('id');
+        $kriterias = Kriteria::orderBy('kode', 'asc')->get();
+        $alternatifs = Alternatif::orderBy('alternatif', 'asc')->get();
+        foreach ($kriterias as $kriteria) {
+            foreach ($alternatifs as $alternatif) {
+                $query = PerhitunganMoora::where('alternatif_uuid', $alternatif->uuid)->where('kriteria_uuid', $kriteria->uuid)->first();
+                $array_pembagi[] = pow($query->bobot, 2);
+                $array_pembilang[] = $query->bobot;
+            }
+        }
+        $kuadrat = array_chunk($array_pembagi, $count_alternatif);
+        $pembilang = array_chunk($array_pembilang, $count_alternatif);
+        $pembagi = [];
+        foreach ($kuadrat as $row) {
+            $jumlah = array_sum($row);
+            $akarKuadrat = floatval(number_format(sqrt($jumlah), 3));
+            $pembagi[] = $akarKuadrat;
+        }
+        $hasil = [];
+        foreach ($pembilang as $row => $val) {
+            $hasil[$row] = array_map(function ($value) use ($row, $pembagi) {
+                return floatval(number_format($value / $pembagi[$row], 3));
+            }, $val);
+        }
+        return $hasil;
     }
 }

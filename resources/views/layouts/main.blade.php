@@ -115,6 +115,7 @@ use Illuminate\Support\Facades\DB;
                     <div class="row mb-2">
                         <div class="col-sm-6">
                             <h1>{{ $title }}</h1>
+                            <p>SPK Pemilihan Karyawan Terbaik Kombinasi Metode MOORA dan SAW</p>  
                         </div>
                         <div class="col-sm-6">
                             <ol class="breadcrumb float-sm-right">
@@ -138,7 +139,7 @@ use Illuminate\Support\Facades\DB;
         </div>
         <!-- /.content-wrapper -->
         <footer class="main-footer">
-            <strong>2024 Muhammad Rizal Nurfauzi</strong> © All rights reserved.
+            <strong>Copyright@ 2024 Muhammad Rizal Nurfauzi</strong> © All rights reserved.
         </footer>
 
         <!-- Control Sidebar -->

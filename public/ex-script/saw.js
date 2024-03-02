@@ -60,6 +60,7 @@ $(document).ready(function () {
 
     // KEPUTUSAN
     $("#btn-normalisasi").on("click", function () {
+        $("#spinner").html(loader)
         $.ajax({
             url: "/moora-normalisasi",
             type: "GET",
@@ -67,8 +68,6 @@ $(document).ready(function () {
             success: function (response) {
                 // console.log(response.hasil)
                 let transposedMatrix = transpose(response.hasil);
-                // Membuat tabel HTML
-
 
                 $.ajax({
                     data: { data: transposedMatrix },
@@ -98,8 +97,8 @@ $(document).ready(function () {
                         for (let i = 0; i < response.result[0].length; i++) {
                             table2 += "<tr><td>A" + (i + 1) + "</td>";
 
-                            for (let j = 0; j < response.result[i].length; j++) {
-                                table2 += "<td>" + response.result[i][j].toFixed(3) + "</td>";
+                            for (let j = 0; j < response.result[0].length; j++) {
+                                table2 += "<td>" + response.result[0][j].toFixed(3) + "</td>";
                             }
 
                             table2 += "</tr>";
@@ -111,8 +110,8 @@ $(document).ready(function () {
 
                         let table3 = `<div class="row">
                                         <div class="col-sm-12">
-                                            <div class="card">
-                                                <div class="card-header">
+                                        <div class="card">
+                                        <div class="card-header">
                                                     <h2>Hasil Ranking</h2>
                                                 </div>
                                             <div class="card-body">
@@ -132,11 +131,12 @@ $(document).ready(function () {
                                         </tr>
                                         `
                         });
-                        table3 += "</tbody></table></div></div></div></div></div></div>";
+                        table3 += "</tbody></table></div><div class='card-footer'><button onclick=\"window.print()\" class=\"btn btn-primary no-print\">Cetak Rekap</button></div></div></div></div></div></div>";
 
                         $("#rangking").html(table3);
 
 
+                        $("#spinner").html("")
                     }
                 });
 

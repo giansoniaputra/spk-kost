@@ -1,16 +1,50 @@
 @extends('layouts.main')
 @section('container')
+<style>
+    .page-title {
+        display: none;
+    }
+
+    #matrix-normalisasi {
+        display: none;
+    }
+
+    /* Tambahkan gaya khusus untuk pencetakan jika diperlukan */
+    @media print {
+
+        /* Atur gaya untuk elemen-elemen yang ingin dicetak */
+        .no-print {
+            display: none;
+            /* Sembunyikan elemen-elemen yang tidak ingin dicetak */
+        }
+
+        /* Tampilkan judul pada saat mencetak */
+        .page-title {
+            display: block;
+            text-align: center;
+            font-size: 24px;
+            margin-bottom: 20px;
+            /* Atur jarak dari konten halaman */
+        }
+
+        #matrix-normalisasi {
+            display: block;
+        }
+    }
+
+</style>
 <div class="row mb-2">
     <div class="col">
-        <button type="button" class="btn btn-primary" id="btn-add-perhitungan">Tambahkan Perhitungan Baru</button>
+        <button type="button" class="btn btn-primary no-print" id="btn-add-perhitungan">Tambahkan Perhitungan Baru</button>
     </div>
 </div>
 <div class="row">
     <div class="col-sm-12">
         <div class="card">
             <div class="card-header">
+                <div class="page-title">Rekap Perhitungan</div>
             </div>
-            <div class="card-body">
+            <div class="card-body no-print">
                 <table id="table-perhitungan" class="table table-bordered table-hover dtr-inline" style="overflow:scroll ">
                     <thead>
                         <tr>
@@ -73,13 +107,13 @@
             </div>
             <div class="card-footer">
                 @if($mooras->count('a.id') > 0)
-                <button class="btn btn-primary float-right" id="btn-normalisasi">Cari Keputusan</button>
+                <button class="btn btn-primary float-right no-print" id="btn-normalisasi">Cari Keputusan</button>
                 @endif
             </div>
         </div>
     </div>
 </div>
-<div id="nilai-preferensi"></div>
+<div id="nilai-preferensi" class="no-print"></div>
 <div id="rangking"></div>
 <script src="/ex-script/saw.js"></script>
 @endsection

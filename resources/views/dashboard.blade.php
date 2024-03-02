@@ -42,6 +42,12 @@
             <a href="/moora" class="small-box-footer">Selengkapnya <i class="fas fa-arrow-circle-right"></i></a>
         </div>
     </div>
-
 </div>
+<p>Metode <b>Multi-Objective Optimization by Ratio Analysis (MOORA)</b> adalah suatu teknik optimasi multi objective
+    yang dapat berhasil diterapkan untuk memecahkan berbagai jenis masalah pengambilan keputusan yang kompleks.
+    Metode <b>SAW (Simple Additive Weighting)</b> merupakan teknik pengambilan keputusan yang menggabungkan
+    preferensi berdasarkan bobot kriteria pada setiap alternatif. Aplikasi ini Mengkombinasikan antara Metode <b>MOORA</b>
+    dan metode <b>SAW</b>, untuk perhitungan pertama menggunakan metode <b>MOORA</b> untuk mencari nilai normalisasi
+    kemudian menggunakan metode <b>SAW</b> untuk mencari nilai preferensi, setelah diketahui nilai preferensi maka
+    dilakukan perankingan</p>
 @endsection

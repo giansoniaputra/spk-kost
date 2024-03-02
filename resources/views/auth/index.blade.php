@@ -17,10 +17,10 @@
 </head>
 
 <body class="hold-transition login-page">
+<img src="/assets/img/AdminLTELogo.png" alt="" width="100px" height="100px"">
+            <h2 href=""><b>Waroeng Spesial Sambal "SS"</b></h2>
     <div class="login-box">
         <div class="login-logo">
-            <img src="/assets/img/AdminLTELogo.png" alt="" width="70vh" class="img-fluid rounded-circle">
-            <a href=""><b>Waroeng SS</b></a>
         </div>
         <!-- /.login-logo -->
         <div class="card">

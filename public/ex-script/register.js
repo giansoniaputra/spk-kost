@@ -24,6 +24,9 @@ $(document).ready(function () {
                 data: "name",
             },
             {
+                data: "role",
+            },
+            {
                 data: "action",
                 orderable: true,
                 searchable: true,
@@ -57,6 +60,8 @@ $(document).ready(function () {
                 if (response.errors) {
                     displayErrors(response.errors);
                 } else {
+                    table.ajax.reload()
+                    $("#current_id").val('')
                     $("#modal-register").modal("hide");
                     $("#username").val('')
                     $("#password").val('')
@@ -71,11 +76,83 @@ $(document).ready(function () {
     $("#btn-close").on("click", function () {
         $("#modal-register").modal("hide");
         $("#username").val('')
+        $("#current_id").val('')
         $("#password").val('')
         $("#password_confirmation").val('')
         $("#modal-title").html('')
         $("#btn-action").html(``)
     })
+
+    $("#table-register").on("click", ".edit-button", function () {
+        let uuid = $(this).attr("data-id");
+        $.ajax({
+            url: "/editUser/" + uuid,
+            type: "GET",
+            dataType: 'json',
+            success: function (response) {
+                console.log(response);
+                $("#current_id").val(response.data.id)
+                $("#modal-register").modal('show');
+                $("#username").val(response.data.username)
+                $("#name").val(response.data.name)
+                $("#modal-title").html('Edit User')
+                $("#btn-action").html(`<button class="btn btn-primary" id="updateUser">Update</button>`)
+            }
+        });
+    })
+
+    $("#modal-register").on("click", "#updateUser", function () {
+        $.ajax({
+            data: $("form[id='form-register']").serialize(),
+            url: "/updateUser",
+            type: "POST",
+            dataType: 'json',
+            success: function (response) {
+                if (response.errors) {
+                    displayErrors(response.errors)
+                } else {
+                    table.ajax.reload()
+                    $("#modal-register").modal("hide");
+                    $("#username").val('')
+                    $("#password").val('')
+                    $("#password_confirmation").val('')
+                    $("#modal-title").html('')
+                    $("#btn-action").html(``)
+                    Swal.fire("Success!", response.success, "success");
+                }
+            }
+        });
+    })
+
+    //HAPUS DATA
+    $("#table-register").on("click", ".delete-button", function () {
+        let id = $(this).attr("data-id");
+        let token = $(this).attr("data-token");
+        Swal.fire({
+            title: "Apakah Kamu Yakin?",
+            text: "Kamu akan menghapus data user!",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#3085d6",
+            cancelButtonColor: "#d33",
+            confirmButtonText: "Yes, Hapus!",
+        }).then((result) => {
+            if (result.isConfirmed) {
+                $.ajax({
+                    data: {
+                        _token: token,
+                    },
+                    url: "/deleteUser/" + id,
+                    type: "POST",
+                    dataType: "json",
+                    success: function (response) {
+                        table.ajax.reload();
+                        Swal.fire("Deleted!", response.success, "success");
+                    },
+                });
+            }
+        });
+    });
     //Hendler Error
     function displayErrors(errors) {
         // menghapus class 'is-invalid' dan pesan error sebelumnya

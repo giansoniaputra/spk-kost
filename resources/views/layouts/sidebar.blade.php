@@ -26,7 +26,7 @@
     <div class="sidebar-heading">
         Main
     </div>
-
+    @if(auth()->user()->role == 'ADMIN')
     <!-- Nav Item - Pages Collapse Menu -->
     <li class="nav-item">
         <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="true" aria-controls="collapseTwo">
@@ -41,6 +41,7 @@
             </div>
         </div>
     </li>
+    @endif
 
     <!-- Nav Item - Utilities Collapse Menu -->
     <li class="nav-item">
@@ -56,6 +57,7 @@
             </div>
         </div>
     </li>
+    @if(auth()->user()->role == 'ADMIN')
     <!-- Nav Item - Utilities Collapse Menu -->
     <li class="nav-item">
         <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseUtilities2" aria-expanded="true" aria-controls="collapseUtilities">
@@ -69,5 +71,6 @@
             </div>
         </div>
     </li>
+    @endif
 
 </ul>

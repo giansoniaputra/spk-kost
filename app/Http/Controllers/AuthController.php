@@ -58,8 +58,8 @@ class AuthController extends Controller
         return DataTables::of($query)->addColumn('action', function ($row) {
             $actionBtn =
                 '
-                <button class="btn btn-rounded btn-sm btn-warning text-dark edit-button" title="Edit Data" data-unique="' . $row->unique . '"><i class="fas fa-edit"></i></button>
-                <button class="btn btn-rounded btn-sm btn-danger text-white delete-button" title="Hapus Data" data-unique="' . $row->unique . '" data-token="' . csrf_token() . '"><i class="fas fa-trash-alt"></i></button>';
+                <button class="btn btn-rounded btn-sm btn-warning text-dark edit-button" title="Edit Data" data-id="' . $row->id . '"><i class="fas fa-edit"></i></button>
+                <button class="btn btn-rounded btn-sm btn-danger text-white delete-button" title="Hapus Data" data-id="' . $row->id . '" data-token="' . csrf_token() . '"><i class="fas fa-trash-alt"></i></button>';
             return $actionBtn;
         })->make(true);
     }
@@ -71,6 +71,7 @@ class AuthController extends Controller
             'name' => 'required',
             'password' => 'required|confirmed|min:7',
             'password_confirmation' => 'required',
+            'role' => 'required',
         ];
         $pesan = [
             'username.required' => 'Username Tidak Boleh Kosong',
@@ -80,6 +81,7 @@ class AuthController extends Controller
             'password.confirmed' => 'Password Tidak Sesuai/Sama',
             'password.min' => 'Password Minimal 7 Karakter',
             'password_confirmation.required' => 'Konfirmasi Password Tidak Boleh Kosong',
+            'role.required' => 'Role tidak boleh kosong',
         ];
         $validator = Validator::make($request->all(), $rules, $pesan);
         if ($validator->fails()) {
@@ -89,9 +91,57 @@ class AuthController extends Controller
                 'username' => $request->username,
                 'name' => ucwords(strtolower($request->name)),
                 'password' => bcrypt($request->password),
+                'role' => $request->role,
             ];
             User::create($data);
             return response()->json(['success' => "Data User Berhasil Ditambahakan"]);
         }
+    }
+
+    public function edit_user($id)
+    {
+        $akun = User::where('id', $id)->first();
+        return response()->json(['data' => $akun]);
+    }
+
+    public function update_user(Request $request)
+    {
+        $rules = [
+            'username' => 'required|min:7',
+            'name' => 'required',
+            'role' => 'required',
+        ];
+        $pesan = [
+            'username.required' => 'Username Tidak Boleh Kosong',
+            'username.min' => 'Username Minimal 7 Character',
+            'name.required' => 'Nama Tidak Boleh Kosong',
+            'password.confirmed' => 'Password Tidak Sesuai/Sama',
+            'password.min' => 'Password Minimal 7 Karakter',
+            'role.required' => 'Role tidak boleh kosong',
+        ];
+        if ($request->password) {
+            $rules['password'] = 'confirmed|min:7';
+            $rules['password.confirmed'] = 'Password tidak sesuai';
+            $rules['password.min'] = 'Password minimal 7 karakter';
+        }
+        $validator = Validator::make($request->all(), $rules, $pesan);
+        if ($validator->fails()) {
+            return response()->json(['errors' => $validator->errors()]);
+        } else {
+            $data = [
+                'username' => $request->username,
+                'name' => ucwords(strtolower($request->name)),
+                'password' => bcrypt($request->password),
+                'role' => $request->role,
+            ];
+            User::where('id', $request->id)->update($data);
+            return response()->json(['success' => "Data User Berhasil Diubah"]);
+        }
+    }
+
+    public function delete_user(Request $request, $id)
+    {
+        User::where('id', $id)->delete();
+        return response()->json(['success' => 'Data User Berhasil Dihapus']);
     }
 }

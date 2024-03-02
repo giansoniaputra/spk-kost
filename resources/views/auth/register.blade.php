@@ -16,6 +16,7 @@
                         <th>No</th>
                         <th>Username</th>
                         <th>Nama</th>
+                        <th>Role</th>
                         <th>Action</th>
                     </thead>
                     <tbody>

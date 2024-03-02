@@ -20,6 +20,11 @@ class User extends Authenticatable
     protected $guarded = ['id'];
     protected $table = 'users';
 
+    public function getRouteKeyName()
+    {
+        return 'id';
+    }
+
     /**
      * The attributes that should be hidden for serialization.
      *

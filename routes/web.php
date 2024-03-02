@@ -41,9 +41,13 @@ Route::get('/home', function () {
 Route::get('/auth', [AuthController::class, 'index'])->name('login')->middleware('guest');
 Route::post('/authenticate', [AuthController::class, 'authenticate']);
 Route::get('/logout', [AuthController::class, 'logout']);
-Route::get('/register', [AuthController::class, 'register']);
-Route::post('/register-create', [AuthController::class, 'create']);
+Route::get('/register', [AuthController::class, 'register'])->middleware('auth');
+Route::post('/register-create', [AuthController::class, 'create'])->middleware('auth');
 Route::get('/dataTablesUser', [AuthController::class, 'dataTables'])->middleware('auth');
+Route::get('/editUser/{id}', [AuthController::class, 'edit_user'])->middleware('auth');
+Route::post('/updateUser', [AuthController::class, 'update_user'])->middleware('auth');
+Route::post('/deleteUser/{id}', [AuthController::class, 'delete_user'])->middleware('auth');
+
 
 // KRITERIA
 Route::resource('/kriteria', KriteriaController::class)->middleware('auth');

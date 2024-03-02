@@ -11,7 +11,7 @@
             <div class="modal-body">
                 <form action="javascript:;" id="form-register">
                     @csrf
-                    <input type="hidden" name="uuid" id="current_uuid">
+                    <input type="hidden" name="id" id="current_id">
                     <div class="form-group mb-3">
                         <label for="name">Nama</label>
                         <input type="text" id="name" name="name" class="form-control" placeholder="Masukan Nama">
@@ -27,6 +27,13 @@
                     <div class="form-group mb-3">
                         <label for="password_confirmation">Password</label>
                         <input type="password" name="password_confirmation" class="form-control" id="password_confirmation" placeholder="Masukan Password">
+                    </div>
+                    <div class="form-group mb-3">
+                        <label for="role">Role</label>
+                        <select name="role" id="role" class="form-control">
+                            <option value="ADMIN">ADMIN</option>
+                            <option value="USER">USER</option>
+                        </select>
                     </div>
                 </form>
             </div>

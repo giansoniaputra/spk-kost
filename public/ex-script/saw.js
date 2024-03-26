@@ -194,7 +194,6 @@ $(document).ready(function () {
                                         <table id="table-perankingan" class="table table-bordered table-hover dtr-inline" style="overflow:scroll ">
                                             <thead>
                                                 <tr>
-                                                    <td>Alternatif</td>
                                                     <td>Keterangan</td>
                                                     <td>Botot</td>
                                                     <td>Ranking</td>
@@ -205,7 +204,6 @@ $(document).ready(function () {
                 data.ranking.forEach((a, b) => {
                     ranking += `
                                             <tr>
-                                                <td>A${b + 1}</td>
                                                 <td>${a[0]}</td>
                                                 <td>${a[1]}</td>
                                                 <td>${b + 1}</td>

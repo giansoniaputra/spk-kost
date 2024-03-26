@@ -157,9 +157,13 @@ class PerhitunganController extends Controller
         $bobot_kriteria = array_chunk($array_bobot, $data['sum_kriteria']);
 
         //Mengambil Bobot Kriteria
+        $bobot_pembagi = 0;
+        foreach ($data['kriterias'] as $kriteria) {
+            $bobot_pembagi += $kriteria->bobot;
+        }
         $bobot = [];
         foreach ($data['kriterias'] as $kriteria) {
-            $bobot[] = $kriteria->bobot / 100;
+            $bobot[] = $kriteria->bobot / $bobot_pembagi;
         }
         //Meng kalikan bobot dengan normalisasi
         $hasil_kali = [];

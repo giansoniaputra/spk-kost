@@ -1,12 +1,12 @@
 <!-- Sidebar -->
-<ul class="navbar-nav bg-gradient-info sidebar sidebar-dark accordion" id="accordionSidebar">
+<ul class="navbar-nav bg-gradient-danger sidebar sidebar-dark accordion" id="accordionSidebar">
 
     <!-- Sidebar - Brand -->
     <a class="sidebar-brand d-flex align-items-center justify-content-center" href="index.html">
         <div class="sidebar-brand-icon rotate-n-15">
             {{-- <i class="fas fa-laugh-wink"></i> --}}
         </div>
-        <div class="sidebar-brand-text mx-3">SPK <sup>MOTOR LISTRIK</sup></div>
+        <div class="sidebar-brand-text mx-3">SPK <sup>IPHONE</sup></div>
     </a>
 
     <!-- Divider -->
@@ -52,7 +52,7 @@
             <div class="bg-white py-2 collapse-inner rounded">
                 <h6 class="collapse-header">SAW & WASPAS:</h6>
                 <a class="collapse-item" href="/saw">SAW</a>
-                <a class="collapse-item" href="/waspas">WASPAS</a>
+                {{-- <a class="collapse-item" href="/waspas">WASPAS</a> --}}
             </div>
         </div>
     </li>
